@@ -1,66 +1,90 @@
-import { Container, Typography, TextField, Button, Box } from "@mui/material";
+import {
+  Container,
+  Typography,
+  TextField,
+  Button,
+  Box,
+  CircularProgress,
+} from "@mui/material";
 import { useNavigate } from "react-router-dom";
-import { useState } from "react";
+import { useForm } from "react-hook-form";
+import { zodResolver } from "@hookform/resolvers/zod";
+import { boardApi } from "@/api/board";
+import { CreatePostSchema, type CreatePostInput } from "@/type/board";
+import { useMutation } from "@/hook/useAsync";
 
-import { createPost } from "@/util/storage/board";
+const defaultValues: CreatePostInput = {
+  title: "",
+  content: "",
+  author: "",
+};
 
-const CreateBoard = () => {
+const NewBoard = () => {
   const navigate = useNavigate();
-  const [formData, setFormData] = useState({
-    title: "",
-    content: "",
-    author: "작성자", // 임시로 고정된 작성자
+
+  const {
+    register,
+    handleSubmit,
+    formState: { errors },
+  } = useForm<CreatePostInput>({
+    resolver: zodResolver(CreatePostSchema),
+    defaultValues,
   });
 
-  const handleChange = (
-    e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>
-  ) => {
-    const { name, value } = e.target;
-    setFormData((prev) => ({
-      ...prev,
-      [name]: value,
-    }));
-  };
+  const { mutate: createPost, isLoading } = useMutation(
+    (data: CreatePostInput) => boardApi.createPost(data),
+    {
+      onSuccess: (data) => {
+        navigate(`/board/${data.id}`);
+      },
+      onError: () => {
+        alert("게시글 작성에 실패했습니다.");
+      },
+    }
+  );
 
-  const handleSubmit = (e: React.FormEvent) => {
-    e.preventDefault();
-    const newPost = createPost(formData);
-    console.log("생성된 게시글:", newPost);
-    navigate("/board");
+  const onSubmit = async (data: CreatePostInput) => {
+    await createPost(data);
   };
 
   return (
-    <Container maxWidth="lg" sx={{ mt: 4 }}>
+    <Container maxWidth="md">
       <Typography variant="h4" component="h1" gutterBottom>
-        게시글 작성
+        새 게시글 작성
       </Typography>
-      <Box component="form" onSubmit={handleSubmit} sx={{ mt: 2 }}>
+
+      <Box
+        component="form"
+        onSubmit={handleSubmit(onSubmit)}
+        sx={{ display: "flex", flexDirection: "column", gap: 2 }}
+      >
         <TextField
-          fullWidth
           label="제목"
-          name="title"
-          value={formData.title}
-          onChange={handleChange}
-          margin="normal"
-          required
+          {...register("title")}
+          error={!!errors.title}
+          helperText={errors.title?.message}
         />
         <TextField
-          fullWidth
-          label="내용"
-          name="content"
-          value={formData.content}
-          onChange={handleChange}
-          margin="normal"
-          required
-          multiline
-          rows={10}
+          label="작성자"
+          {...register("author")}
+          error={!!errors.author}
+          helperText={errors.author?.message}
         />
-        <Box sx={{ mt: 2, display: "flex", gap: 2 }}>
-          <Button type="button" variant="outlined" onClick={() => navigate(-1)}>
+        <TextField
+          label="내용"
+          multiline
+          rows={4}
+          {...register("content")}
+          error={!!errors.content}
+          helperText={errors.content?.message}
+        />
+
+        <Box display="flex" gap={2} mt={2}>
+          <Button variant="outlined" onClick={() => navigate("/board")}>
             취소
           </Button>
-          <Button type="submit" variant="contained" color="primary">
-            등록
+          <Button type="submit" variant="contained" disabled={isLoading}>
+            {isLoading ? <CircularProgress size={24} /> : "작성"}
           </Button>
         </Box>
       </Box>
@@ -68,4 +92,4 @@ const CreateBoard = () => {
   );
 };
 
-export default CreateBoard;
+export default NewBoard;

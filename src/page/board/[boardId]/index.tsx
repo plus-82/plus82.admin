@@ -5,52 +5,59 @@ import {
   Box,
   Button,
   Divider,
+  CircularProgress,
 } from "@mui/material";
 import { useNavigate, useParams } from "react-router-dom";
-import { useState, useEffect } from "react";
-
-import { getPost, deletePost } from "@/util/storage/board";
-
-interface Post {
-  id: number;
-  title: string;
-  content: string;
-  author: string;
-  createdAt: string;
-}
+import { boardApi } from "@/api/board";
+import { useQuery, useMutation } from "@/hook/useAsync";
 
 const BoardDetail = () => {
   const navigate = useNavigate();
   const { boardId } = useParams();
-  const [post, setPost] = useState<Post | null>(null);
 
-  useEffect(() => {
-    if (boardId) {
-      const foundPost = getPost(Number(boardId));
-      setPost(foundPost);
-    }
-  }, [boardId]);
-
-  const handleEdit = () => {
-    navigate(`/board/${boardId}/edit`);
-  };
-
-  const handleDelete = () => {
-    if (!boardId) return;
-
-    const confirmed = window.confirm("정말로 삭제하시겠습니까?");
-    if (confirmed) {
-      const isDeleted = deletePost(Number(boardId));
-      if (isDeleted) {
+  const { data: post, isLoading } = useQuery(
+    () => boardApi.getPost(Number(boardId)),
+    {
+      immediate: !!boardId,
+      onError: () => {
+        alert("게시글을 불러오는데 실패했습니다.");
         navigate("/board");
-      } else {
+      },
+    }
+  );
+
+  const { mutate: deletePost, isLoading: isDeleting } = useMutation<void, void>(
+    () => boardApi.deletePost(Number(boardId)),
+    {
+      onSuccess: () => {
+        navigate("/board");
+      },
+      onError: () => {
         alert("게시글 삭제에 실패했습니다.");
-      }
+      },
+    }
+  );
+
+  const handleDelete = async () => {
+    if (window.confirm("정말 삭제하시겠습니까?")) {
+      await deletePost();
     }
   };
+
+  if (isLoading) {
+    return (
+      <Box display="flex" justifyContent="center" mt={4}>
+        <CircularProgress />
+      </Box>
+    );
+  }
 
   if (!post) {
-    return <div>로딩 중...</div>;
+    return (
+      <Box display="flex" justifyContent="center" mt={4}>
+        <Typography>게시글을 찾을 수 없습니다.</Typography>
+      </Box>
+    );
   }
 
   return (
@@ -75,11 +82,19 @@ const BoardDetail = () => {
           <Button variant="outlined" onClick={() => navigate("/board")}>
             목록
           </Button>
-          <Button variant="contained" onClick={handleEdit}>
+          <Button
+            variant="contained"
+            onClick={() => navigate(`/board/${boardId}/edit`)}
+          >
             수정
           </Button>
-          <Button variant="contained" color="error" onClick={handleDelete}>
-            삭제
+          <Button
+            variant="contained"
+            color="error"
+            onClick={handleDelete}
+            disabled={isDeleting}
+          >
+            {isDeleting ? "삭제 중..." : "삭제"}
           </Button>
         </Box>
       </Paper>

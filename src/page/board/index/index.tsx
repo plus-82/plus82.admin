@@ -9,34 +9,48 @@ import {
   TableHead,
   TableRow,
   Button,
+  CircularProgress,
 } from "@mui/material";
 import { useNavigate } from "react-router-dom";
-import { useState, useEffect } from "react";
-
-import { getPosts } from "@/util/storage/board";
-
-interface Post {
-  id: number;
-  title: string;
-  author: string;
-  createdAt: string;
-}
+import { boardApi } from "@/api/board";
+import { useQuery } from "@/hook/useAsync";
 
 const BoardList = () => {
   const navigate = useNavigate();
-  const [posts, setPosts] = useState<Post[]>([]);
 
-  useEffect(() => {
-    setPosts(getPosts());
-  }, []);
+  const {
+    data: posts,
+    isLoading,
+    error,
+  } = useQuery(() => boardApi.getList(), {
+    onError: () => {
+      alert("게시글 목록을 불러오는데 실패했습니다.");
+    },
+  });
 
   const handleCreateClick = () => {
     navigate("/board/create");
   };
 
-  const handleRowClick = (id: number) => {
-    navigate(`/board/${id}`);
+  const handleRowClick = (postId: number) => {
+    navigate(`/board/${postId}`);
   };
+
+  if (isLoading) {
+    return (
+      <Container sx={{ display: "flex", justifyContent: "center", mt: 4 }}>
+        <CircularProgress />
+      </Container>
+    );
+  }
+
+  if (error) {
+    return (
+      <Container sx={{ mt: 4 }}>
+        <Typography color="error">게시글을 불러오는데 실패했습니다.</Typography>
+      </Container>
+    );
+  }
 
   return (
     <Container maxWidth="lg" sx={{ mt: 4 }}>
@@ -62,7 +76,7 @@ const BoardList = () => {
             </TableRow>
           </TableHead>
           <TableBody>
-            {posts.map((post) => (
+            {posts?.map((post) => (
               <TableRow
                 key={post.id}
                 hover
