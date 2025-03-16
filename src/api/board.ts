@@ -1,19 +1,14 @@
 /* eslint-disable @typescript-eslint/no-unused-vars */
 
+import {
+  getPosts,
+  getPost,
+  createPost,
+  updatePost,
+  deletePost,
+} from "@/util/storage/board";
 import type { Post, CreatePostInput } from "../type/board";
 import http from "./instance";
-
-// localStorage를 임시 데이터베이스로 사용 (API 연동 전까지만 사용)
-const STORAGE_KEY = "boardPosts";
-
-const getPosts = (): Post[] => {
-  const posts = localStorage.getItem(STORAGE_KEY);
-  return posts ? JSON.parse(posts) : [];
-};
-
-const savePosts = (posts: Post[]) => {
-  localStorage.setItem(STORAGE_KEY, JSON.stringify(posts));
-};
 
 // API 엔드포인트
 const BOARD_API = {
@@ -43,8 +38,7 @@ export const boardApi = {
       });
     } catch (error) {
       // API 연동 전까지는 localStorage 사용
-      const posts = getPosts();
-      const post = posts.find((p) => p.id === id);
+      const post = getPost(id);
       if (!post) throw new Error("게시글을 찾을 수 없습니다.");
       return post;
     }
@@ -59,14 +53,7 @@ export const boardApi = {
       });
     } catch (error) {
       // API 연동 전까지는 localStorage 사용
-      const posts = getPosts();
-      const newPost: Post = {
-        ...data,
-        id: Math.max(...posts.map((p) => p.id), 0) + 1,
-        createdAt: new Date().toISOString().split("T")[0],
-      };
-      savePosts([...posts, newPost]);
-      return newPost;
+      return createPost(data);
     }
   },
 
@@ -81,15 +68,9 @@ export const boardApi = {
         data,
       });
     } catch (error) {
-      // API 연동 전까지는 localStorage 사용
-      const posts = getPosts();
-      const index = posts.findIndex((p) => p.id === id);
-      if (index === -1) throw new Error("게시글을 찾을 수 없습니다.");
-
-      const updatedPost = { ...posts[index], ...data };
-      posts[index] = updatedPost;
-      savePosts(posts);
-      return updatedPost;
+      const response = updatePost(id, data);
+      if (!response) throw new Error("게시글을 찾을 수 없습니다.");
+      return response;
     }
   },
 
@@ -101,9 +82,7 @@ export const boardApi = {
       });
     } catch (error) {
       // API 연동 전까지는 localStorage 사용
-      const posts = getPosts();
-      const filteredPosts = posts.filter((p) => p.id !== id);
-      savePosts(filteredPosts);
+      deletePost(id);
     }
   },
 };
