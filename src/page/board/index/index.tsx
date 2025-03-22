@@ -11,23 +11,22 @@ import {
   Button,
   CircularProgress,
 } from "@mui/material";
+import { useQuery } from "@tanstack/react-query";
+import { useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 
-import { boardApi } from "@/api/board";
-import { useQuery } from "@/hook/useAsync";
+import { boardQueries } from "@/api/board/query";
 
 const BoardList = () => {
   const navigate = useNavigate();
 
-  const {
-    data: posts,
-    isLoading,
-    error,
-  } = useQuery(() => boardApi.getList(), {
-    onError: () => {
+  const { data: posts, isLoading, error } = useQuery(boardQueries.list());
+
+  useEffect(() => {
+    if (error) {
       alert("게시글 목록을 불러오는데 실패했습니다.");
-    },
-  });
+    }
+  }, [error]);
 
   const handleCreateClick = () => {
     navigate("/board/create");

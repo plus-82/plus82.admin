@@ -7,22 +7,28 @@ import {
   Box,
   CircularProgress,
 } from "@mui/material";
+import { useQuery, useMutation } from "@tanstack/react-query";
+import { isNil } from 'lodash-es'
 import { useForm } from "react-hook-form";
 import { useNavigate, useParams } from "react-router-dom";
 
-import { boardApi } from "@/api/board";
-import { useQuery, useMutation } from "@/hook/useAsync";
+import { boardQueries } from "@/api/board/query";
+import { boardApi } from "@/api/board/request";
 import { CreatePostSchema, type CreatePostInput } from "@/type/board";
 
 const EditBoard = () => {
   const navigate = useNavigate();
   const { boardId } = useParams();
 
+  const { data: post, isLoading, error } = useQuery({
+    ...boardQueries.detail(Number(boardId)),
+    enabled: !isNil(boardId)
+  })
+
   const {
     register,
     handleSubmit,
     formState: { errors },
-    reset,
   } = useForm<CreatePostInput>({
     resolver: zodResolver(CreatePostSchema),
     defaultValues: {
@@ -30,42 +36,24 @@ const EditBoard = () => {
       content: "",
       author: "",
     },
+    values: post,
   });
 
-  // 게시글 조회
-  const { isLoading, error } = useQuery(
-    () => boardApi.getPost(Number(boardId)),
-    {
-      immediate: !!boardId,
-      onSuccess: (data) => {
-        reset({
-          title: data.title,
-          content: data.content,
-          author: data.author,
-        });
-      },
-      onError: () => {
-        alert("게시글을 불러오는데 실패했습니다.");
-      },
-    }
-  );
+  const updatePost = useMutation({
+    mutationFn: boardApi.updatePost,
+  })
 
-  // 게시글 수정
-  const { mutate: updatePost, isLoading: isSubmitting } = useMutation(
-    (data: CreatePostInput) => boardApi.updatePost(Number(boardId), data),
-    {
+  const onSubmit = async (data: CreatePostInput) => {
+    if (!boardId) return;
+
+    updatePost.mutate({ id: Number(boardId), ...data }, {
       onSuccess: () => {
         navigate(`/board/${boardId}`);
       },
       onError: () => {
         alert("게시글 수정에 실패했습니다.");
       },
-    }
-  );
-
-  const onSubmit = async (data: CreatePostInput) => {
-    if (!boardId) return;
-    await updatePost(data);
+    });
   };
 
   if (isLoading) {
@@ -125,9 +113,9 @@ const EditBoard = () => {
             type="submit"
             variant="contained"
             color="primary"
-            disabled={isSubmitting}
+            disabled={updatePost.isPending}
           >
-            {isSubmitting ? "수정 중..." : "수정"}
+            {updatePost.isPending ? "수정 중..." : "수정"}
           </Button>
         </Box>
       </Box>

@@ -8,9 +8,9 @@ import {
   deletePost,
 } from "@/util/storage/board";
 
-import http from "./instance";
+import http from "../instance";
 
-import type { Post, CreatePostInput } from "../type/board";
+import type { Post, CreatePostInput } from "../../type/board";
 
 // API 엔드포인트
 const BOARD_API = {
@@ -35,6 +35,7 @@ export const boardApi = {
   // 게시글 상세 조회
   getPost: async (id: number): Promise<Post> => {
     try {
+      console.log(id)
       return await http.get<Post>({
         url: BOARD_API.POST(id),
       });
@@ -48,7 +49,9 @@ export const boardApi = {
   },
 
   // 게시글 생성
-  createPost: async (data: CreatePostInput): Promise<Post> => {
+  createPost: async (
+    data: CreatePostInput
+): Promise<Post> => {
     try {
       return await http.post<Post>({
         url: BOARD_API.BASE,
@@ -61,10 +64,12 @@ export const boardApi = {
   },
 
   // 게시글 수정
-  updatePost: async (
-    id: number,
-    data: Partial<CreatePostInput>
-  ): Promise<Post> => {
+  updatePost: async ({
+    id,
+    ...data
+  }: Partial<CreatePostInput> & {
+    id: number;
+  }): Promise<Post> => {
     try {
       return await http.put<Post>({
         url: BOARD_API.POST(id),
@@ -79,7 +84,11 @@ export const boardApi = {
   },
 
   // 게시글 삭제
-  deletePost: async (id: number): Promise<void> => {
+  deletePost: async ({
+    id,
+  }: {
+    id: number;
+  }): Promise<void> => {
     try {
       await http.delete<void>({
         url: BOARD_API.POST(id),

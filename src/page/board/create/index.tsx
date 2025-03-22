@@ -7,11 +7,11 @@ import {
   Box,
   CircularProgress,
 } from "@mui/material";
+import { useMutation } from "@tanstack/react-query";
 import { useForm } from "react-hook-form";
 import { useNavigate } from "react-router-dom";
 
-import { boardApi } from "@/api/board";
-import { useMutation } from "@/hook/useAsync";
+import { boardApi } from "@/api/board/request";
 import { CreatePostSchema, type CreatePostInput } from "@/type/board";
 
 const defaultValues: CreatePostInput = {
@@ -32,20 +32,19 @@ const NewBoard = () => {
     defaultValues,
   });
 
-  const { mutate: createPost, isLoading } = useMutation(
-    (data: CreatePostInput) => boardApi.createPost(data),
-    {
+  const createPost = useMutation({
+    mutationFn: boardApi.createPost,
+  })
+
+  const onSubmit = async (data: CreatePostInput) => {
+    createPost.mutate(data, {
       onSuccess: (data) => {
         navigate(`/board/${data.id}`);
       },
       onError: () => {
         alert("게시글 작성에 실패했습니다.");
       },
-    }
-  );
-
-  const onSubmit = async (data: CreatePostInput) => {
-    await createPost(data);
+    });
   };
 
   return (
@@ -84,8 +83,8 @@ const NewBoard = () => {
           <Button variant="outlined" onClick={() => navigate("/board")}>
             취소
           </Button>
-          <Button type="submit" variant="contained" disabled={isLoading}>
-            {isLoading ? <CircularProgress size={24} /> : "작성"}
+          <Button type="submit" variant="contained" disabled={createPost.isPending}>
+            {createPost.isPending ? <CircularProgress size={24} /> : "작성"}
           </Button>
         </Box>
       </Box>

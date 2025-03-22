@@ -7,42 +7,44 @@ import {
   Divider,
   CircularProgress,
 } from "@mui/material";
+import { useMutation, useQuery } from "@tanstack/react-query";
+import { isNil } from "lodash-es";
+import { useEffect } from "react";
 import { useNavigate, useParams } from "react-router-dom";
 
-import { boardApi } from "@/api/board";
-import { useQuery, useMutation } from "@/hook/useAsync";
+import { boardQueries } from "@/api/board/query";
+import { boardApi } from "@/api/board/request";
 
 const BoardDetail = () => {
   const navigate = useNavigate();
   const { boardId } = useParams();
 
-  const { data: post, isLoading } = useQuery(
-    () => boardApi.getPost(Number(boardId)),
-    {
-      immediate: !!boardId,
-      onError: () => {
-        alert("게시글을 불러오는데 실패했습니다.");
-        navigate("/board");
-      },
-    }
-  );
+  const { data: post, isLoading, error } = useQuery({
+    ...boardQueries.detail(Number(boardId)),
+    enabled: !isNil(boardId),
+  })
 
-  const { mutate: deletePost, isLoading: isDeleting } = useMutation<void, void>(
-    () => boardApi.deletePost(Number(boardId)),
-    {
-      onSuccess: () => {
-        navigate("/board");
-      },
-      onError: () => {
-        alert("게시글 삭제에 실패했습니다.");
-      },
+  useEffect(() => {
+    if (error) {
+      navigate("/board");
     }
-  );
+  }, [boardId, error, navigate]);
+
+  const deletePost = useMutation({
+    mutationFn: boardApi.deletePost,
+  })
 
   const handleDelete = async () => {
-    if (window.confirm("정말 삭제하시겠습니까?")) {
-      await deletePost();
-    }
+    if (!window.confirm("정말 삭제하시겠습니까?")) return;
+
+    deletePost.mutate({ id: Number(boardId) }, {
+      onSuccess: () => {
+          navigate("/board");
+        },
+        onError: () => {
+        alert("게시글 삭제에 실패했습니다.");
+      },
+    });
   };
 
   if (isLoading) {
@@ -93,9 +95,9 @@ const BoardDetail = () => {
             variant="contained"
             color="error"
             onClick={handleDelete}
-            disabled={isDeleting}
+            disabled={deletePost.isPending}
           >
-            {isDeleting ? "삭제 중..." : "삭제"}
+            {deletePost.isPending ? "삭제 중..." : "삭제"}
           </Button>
         </Box>
       </Paper>
