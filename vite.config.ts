@@ -9,4 +9,13 @@ export default defineConfig({
       "@": "/src",
     },
   },
+  server: {
+    proxy: {
+      '/api': {
+        target: 'https://back.plus82.co',
+        changeOrigin: true,
+      },
+    },
+    port: 3000,
+  },
 });
