@@ -12,6 +12,7 @@ import {
   CircularProgress,
 } from "@mui/material";
 import { useNavigate } from "react-router-dom";
+
 import { boardApi } from "@/api/board";
 import { useQuery } from "@/hook/useAsync";
 

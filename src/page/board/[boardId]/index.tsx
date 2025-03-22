@@ -8,6 +8,7 @@ import {
   CircularProgress,
 } from "@mui/material";
 import { useNavigate, useParams } from "react-router-dom";
+
 import { boardApi } from "@/api/board";
 import { useQuery, useMutation } from "@/hook/useAsync";
 

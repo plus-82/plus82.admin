@@ -1,3 +1,4 @@
+import { zodResolver } from "@hookform/resolvers/zod";
 import {
   Container,
   Typography,
@@ -6,12 +7,12 @@ import {
   Box,
   CircularProgress,
 } from "@mui/material";
-import { useNavigate } from "react-router-dom";
 import { useForm } from "react-hook-form";
-import { zodResolver } from "@hookform/resolvers/zod";
+import { useNavigate } from "react-router-dom";
+
 import { boardApi } from "@/api/board";
-import { CreatePostSchema, type CreatePostInput } from "@/type/board";
 import { useMutation } from "@/hook/useAsync";
+import { CreatePostSchema, type CreatePostInput } from "@/type/board";
 
 const defaultValues: CreatePostInput = {
   title: "",

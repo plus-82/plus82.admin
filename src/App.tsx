@@ -1,9 +1,10 @@
 import { BrowserRouter, Routes, Route } from "react-router-dom";
-import Main from "./page/index";
-import BoardList from "./page/board/index";
-import CreateBoard from "./page/board/create";
+
 import BoardDetail from "./page/board/[boardId]";
 import EditBoard from "./page/board/[boardId]/edit";
+import CreateBoard from "./page/board/create";
+import BoardList from "./page/board/index";
+import Main from "./page/index";
 
 import "@fontsource/roboto/300.css";
 import "@fontsource/roboto/400.css";

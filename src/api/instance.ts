@@ -4,11 +4,12 @@ import axios from "axios";
 import fileDownload from "js-file-download";
 import qs from "qs";
 
-import { CommonResponseCode } from "@/api/response/response-code";
-import type { CommonResponse, SuccessResponse } from "@/api/response/common";
 import { HttpError } from "@/api/error/http-error";
+import type { CommonResponse, SuccessResponse } from "@/api/response/common";
+import { CommonResponseCode } from "@/api/response/response-code";
 
 import type { AxiosInstance, AxiosPromise } from "axios";
+
 
 export enum ContentType {
   JSON = "application/json",
@@ -41,12 +42,12 @@ class CustomAxios {
     });
 
     this.instance.interceptors.request.use(
-      (config) => config,
-      (error) => Promise.reject(error)
+      config => config,
+      error => Promise.reject(error)
     );
 
     this.instance.interceptors.response.use(
-      (response) => {
+      response => {
         const commonResponse: CommonResponse = response.data;
 
         if (
@@ -62,7 +63,7 @@ class CustomAxios {
 
         return response.data;
       },
-      async (error) => {
+      async error => {
         const status = error?.response?.status;
 
         if (error.response.data instanceof Blob) {

@@ -7,8 +7,10 @@ import {
   updatePost,
   deletePost,
 } from "@/util/storage/board";
-import type { Post, CreatePostInput } from "../type/board";
+
 import http from "./instance";
+
+import type { Post, CreatePostInput } from "../type/board";
 
 // API 엔드포인트
 const BOARD_API = {
@@ -40,6 +42,7 @@ export const boardApi = {
       // API 연동 전까지는 localStorage 사용
       const post = getPost(id);
       if (!post) throw new Error("게시글을 찾을 수 없습니다.");
+
       return post;
     }
   },
@@ -70,6 +73,7 @@ export const boardApi = {
     } catch (error) {
       const response = updatePost(id, data);
       if (!response) throw new Error("게시글을 찾을 수 없습니다.");
+
       return response;
     }
   },
