@@ -1,10 +1,14 @@
 import { z } from "zod";
 
+// 공통 Academy 스키마
 export const AcademySchema = z.object({
   id: z.number(),
-  name: z.string().min(1, "학원 이름을 입력해주세요"),
-  description: z.string().nullable(),
-  businessRegistrationNumber: z.string().nullable(),
+  name: z.string(),
+  nameEn: z.string(),
+  representativeName: z.string(),
+  representativeEmail: z.string().email(),
+  description: z.string().nullable().optional(), // 상세 조회에서만 사용
+  businessRegistrationNumber: z.string(),
   locationType: z.enum([
     "SEOUL",
     "BUSAN",
@@ -24,13 +28,51 @@ export const AcademySchema = z.object({
     "GYEONGNAM",
     "JEJU",
   ]),
-  detailedAddress: z.string().min(1, "상세 주소를 입력해주세요"),
-  forKindergarten: z.boolean(),
-  forElementary: z.boolean(),
-  forMiddleSchool: z.boolean(),
-  forHighSchool: z.boolean(),
-  forAdult: z.boolean(),
-  imageUrls: z.array(z.string().url()),  // URL 형태로 검증
+  detailedAddress: z.string(),
+  byAdmin: z.boolean().optional(), // 목록 조회에서만 사용
+  lat: z.number().optional(), // 상세 조회에서만 사용
+  lng: z.number().optional(), // 상세 조회에서만 사용
+  forKindergarten: z.boolean().optional(), // 상세 조회에서만 사용
+  forElementary: z.boolean().optional(), // 상세 조회에서만 사용
+  forMiddleSchool: z.boolean().optional(), // 상세 조회에서만 사용
+  forHighSchool: z.boolean().optional(), // 상세 조회에서만 사용
+  forAdult: z.boolean().optional(), // 상세 조회에서만 사용
+  imageUrls: z.array(z.string().url()).optional(), // 상세 조회에서만 사용
 });
 
-export type Academy = z.infer<typeof AcademySchema>;
+// 목록 조회 스키마
+export const AcademyListItemSchema = AcademySchema.pick({
+  id: true,
+  name: true,
+  nameEn: true,
+  representativeName: true,
+  representativeEmail: true,
+  businessRegistrationNumber: true,
+  locationType: true,
+  detailedAddress: true,
+  byAdmin: true,
+});
+
+// 상세 조회 스키마
+export const AcademyDetailSchema = AcademySchema.pick({
+  id: true,
+  name: true,
+  nameEn: true,
+  representativeName: true,
+  description: true,
+  businessRegistrationNumber: true,
+  locationType: true,
+  detailedAddress: true,
+  lat: true,
+  lng: true,
+  forKindergarten: true,
+  forElementary: true,
+  forMiddleSchool: true,
+  forHighSchool: true,
+  forAdult: true,
+  imageUrls: true,
+});
+
+// 목록 조회와 상세 조회 타입
+export type AcademyListItem = z.infer<typeof AcademyListItemSchema>;
+export type AcademyDetail = z.infer<typeof AcademyDetailSchema>;

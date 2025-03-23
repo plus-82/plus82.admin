@@ -1,5 +1,6 @@
 import {
     Container,
+    Box,
     Typography,
     Paper,
     Table,
@@ -54,25 +55,30 @@ import {
   
     return (
       <Container maxWidth="lg" sx={{ mt: 4 }}>
-        <Typography variant="h4" component="h1" gutterBottom>
-          학원
-        </Typography>
-        <Button
-          variant="contained"
-          color="primary"
-          onClick={handleCreateClick}
-          sx={{ mb: 2 }}
-        >
-          글 작성
-        </Button>
+
+        <Box sx={{ display: "flex", justifyContent: "space-between", alignItems: "center", mb: 2 }}>
+          <Typography variant="h4" component="h1" gutterBottom>
+            학원
+          </Typography>
+          <Button
+            variant="contained"
+            color="primary"
+            onClick={handleCreateClick}
+          >
+            학원 추가
+          </Button>
+        </Box>
+
         <TableContainer component={Paper}>
           <Table>
             <TableHead>
               <TableRow>
                 <TableCell>번호</TableCell>
-                <TableCell>제목</TableCell>
-                <TableCell>작성자</TableCell>
-                <TableCell>작성일</TableCell>
+                <TableCell>학원명</TableCell>
+                <TableCell>사업자 등록번호</TableCell>
+                <TableCell>대표자명</TableCell>
+                <TableCell>대표자 이메일</TableCell>
+                <TableCell>주소</TableCell>
               </TableRow>
             </TableHead>
             <TableBody>
@@ -83,10 +89,12 @@ import {
                   onClick={() => handleRowClick(academies.id)}
                   sx={{ cursor: "pointer" }}
                 >
-                  <TableCell>{academies.name}</TableCell>
-                  <TableCell>{academies.description}</TableCell>
+                  <TableCell>{academies.id}</TableCell>
+                  <TableCell>{academies.name} ({academies.nameEn})</TableCell>
                   <TableCell>{academies.businessRegistrationNumber}</TableCell>
-                  <TableCell>{academies.locationType}</TableCell>
+                  <TableCell>{academies.representativeName}</TableCell>
+                  <TableCell>{academies.representativeEmail}</TableCell>
+                  <TableCell>{academies.locationType} / {academies.detailedAddress}</TableCell>
                 </TableRow>
               ))}
             </TableBody>

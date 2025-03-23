@@ -1,4 +1,4 @@
-import type { Academy } from "../../type/academy";
+import type { AcademyListItem } from "../../type/academy";
 import http from "../instance";
 
 // API 엔드포인트
@@ -10,9 +10,9 @@ const ACADEMY_API = {
 export const academyApi = {
 
   // 로그인
-  getList: async (): Promise<Academy[]> => {
+  getList: async (): Promise<AcademyListItem[]> => {
     try {
-      return await http.get<Academy[]>({
+      return await http.get<AcademyListItem[]>({
         url: ACADEMY_API.BASE,
       });
     } catch (error) {
