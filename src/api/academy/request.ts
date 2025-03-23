@@ -1,0 +1,22 @@
+import type { Academy } from "../../type/academy";
+import http from "../instance";
+
+// API 엔드포인트
+const ACADEMY_API = {
+  BASE: "/academies",
+};
+
+// API 함수들
+export const academyApi = {
+
+  // 로그인
+  getList: async (): Promise<Academy[]> => {
+    try {
+      return await http.get<Academy[]>({
+        url: "http://localhost:8080/api/v1/academies",  // 절대 경로 사용
+      });
+    } catch (error) {
+      throw new Error("조회 실패");
+    }
+  }
+}

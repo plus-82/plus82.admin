@@ -4,6 +4,7 @@ import BoardDetail from "./page/board/[boardId]";
 import EditBoard from "./page/board/[boardId]/edit";
 import CreateBoard from "./page/board/create";
 import BoardList from "./page/board/index";
+import AcademyList from "./page/academy/index";
 import Login from "./page/index/login";
 
 import "@fontsource/roboto/300.css";
@@ -16,6 +17,7 @@ const App = () => {
     <BrowserRouter>
       <Routes>
         <Route index element={<Login />} />
+        <Route path="/academy" element={<AcademyList />} />
         <Route path="/board" element={<BoardList />} />
         <Route path="/board/create" element={<CreateBoard />} />
         <Route path="/board/:boardId" element={<BoardDetail />} />
