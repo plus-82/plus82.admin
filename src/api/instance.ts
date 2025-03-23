@@ -3,6 +3,7 @@
 import axios from "axios";
 import fileDownload from "js-file-download";
 import qs from "qs";
+import { getCookie } from 'typescript-cookie'
 
 import { HttpError } from "@/api/error/http-error";
 import type { CommonResponse, SuccessResponse } from "@/api/response/common";
@@ -88,46 +89,65 @@ class CustomAxios {
     );
   }
 
-  async get<T>({ url, data }: AxiosMethodType): Promise<T> {
+  // Authorization 헤더를 동적으로 추가
+  private addAuth(headers: Record<string, string>, useAuth: boolean): Record<string, string> {
+    if (useAuth) {
+      const token = getCookie("Authorization");
+      if (token) {
+        headers["Authorization"] = `Bearer ${token}`;
+      }
+    }
+    return headers;
+  }
+
+  async get<T>({ url, data, useAuth = true }: AxiosMethodType & { useAuth?: boolean }): Promise<T> {
     const queryParam = qs.stringify(data, { arrayFormat: "repeat" });
     const newUrl = queryParam ? `${url}?${queryParam}` : url;
 
-    const commonResponse: SuccessResponse<T> = await this.instance.get(newUrl);
+    const headers = this.addAuth({}, useAuth);
+    const commonResponse: SuccessResponse<T> = await this.instance.get(newUrl, { headers });
 
     return commonResponse.data;
   }
 
-  async post<T>({ url, contentType, data }: AxiosMethodType): Promise<T> {
-    const commonResponse: SuccessResponse<T> = await this.instance.post(
-      url,
-      data,
-      {
-        headers: {
-          "Content-Type": contentType,
-        },
-      }
+  async post<T>({
+    url,
+    contentType,
+    data,
+    useAuth = true,
+  }: AxiosMethodType & { useAuth?: boolean }): Promise<T> {
+    const headers = this.addAuth(
+      { "Content-Type": contentType ?? ContentType.JSON },
+      useAuth
     );
 
+    const commonResponse: SuccessResponse<T> = await this.instance.post(url, data, { headers });
+
     return commonResponse.data;
   }
 
-  async put<T>({ url, contentType, data }: AxiosMethodType): Promise<T> {
-    const commonResponse: SuccessResponse<T> = await this.instance.put(
-      url,
-      data,
-      {
-        headers: {
-          "Content-Type": contentType,
-        },
-      }
+  async put<T>({
+    url,
+    contentType,
+    data,
+    useAuth = true,
+  }: AxiosMethodType & { useAuth?: boolean }): Promise<T> {
+    const headers = this.addAuth(
+      { "Content-Type": contentType ?? ContentType.JSON },
+      useAuth
     );
 
+    const commonResponse: SuccessResponse<T> = await this.instance.put(url, data, { headers });
+
     return commonResponse.data;
   }
 
-  async delete<T>({ url, data }: AxiosMethodType): Promise<T> {
+  async delete<T>({ url, data, useAuth = true }: AxiosMethodType & { useAuth?: boolean }): Promise<T> {
+    const headers = this.addAuth({}, useAuth);
+
     const commonResponse: SuccessResponse<T> = await this.instance.delete(url, {
       data,
+      headers,
     });
 
     return commonResponse.data;

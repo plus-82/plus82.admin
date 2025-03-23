@@ -18,6 +18,7 @@ export const authApi = {
       const response = await http.post<SignInResponse>({
         url: AUTH_API.BASE + AUTH_API.SIGN_IN,
         data,
+        useAuth: false,
       });
       return response;
     } catch (error) {
