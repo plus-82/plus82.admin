@@ -16,8 +16,7 @@ export const authApi = {
   ): Promise<SignInResponse> => {
     try {
       const response = await http.post<SignInResponse>({
-        // url: AUTH_API.BASE + AUTH_API.SIGN_IN,
-        url: "http://localhost:8080/api/v1/auth/sign-in",  // 절대 경로 사용
+        url: AUTH_API.BASE + AUTH_API.SIGN_IN,
         data,
       });
       return response;

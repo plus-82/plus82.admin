@@ -153,7 +153,8 @@ class CustomAxios {
   }
 }
 
-const baseURL = `${window.location.origin}/api/`;
+// const baseURL = `${window.location.origin}/api/`;
+const baseURL = `http://localhost:8080/api/v1/`;
 
 const http = new CustomAxios(baseURL);
 

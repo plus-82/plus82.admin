@@ -13,7 +13,7 @@ export const academyApi = {
   getList: async (): Promise<Academy[]> => {
     try {
       return await http.get<Academy[]>({
-        url: "http://localhost:8080/api/v1/academies",  // 절대 경로 사용
+        url: ACADEMY_API.BASE,
       });
     } catch (error) {
       throw new Error("조회 실패");
