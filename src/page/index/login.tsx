@@ -13,6 +13,7 @@ import { useNavigate } from "react-router-dom";
 
 import { authApi } from "@/api/auth/request";
 import { SignInRequestSchema, SignInResponse, type SignInRequest } from "@/type/auth";
+import { setCookie } from "typescript-cookie";
 
 const defaultValues: SignInRequest = {
   email: "",
@@ -38,8 +39,8 @@ const Login = () => {
   const onSubmit = async (data: SignInRequest) => {
     requestSignIn.mutate(data, {
       onSuccess: (data: SignInResponse) => {
-        console.log(data.accessToken);
-        // navigate(`/board`);
+        setCookie("Authorization", data.accessToken);
+        navigate(`/academy`);
       },
       onError: () => {
         alert("아이디 비밀번호를 확인해주세요");
