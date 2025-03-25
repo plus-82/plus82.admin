@@ -11,12 +11,8 @@ export const academyApi = {
 
   // 로그인
   getList: async (): Promise<AcademyListItem[]> => {
-    try {
-      return await http.get<AcademyListItem[]>({
-        url: ACADEMY_API.BASE,
-      });
-    } catch (error) {
-      throw new Error("조회 실패");
-    }
+    return await http.get<AcademyListItem[]>({
+      url: ACADEMY_API.BASE,
+    });
   }
 }
