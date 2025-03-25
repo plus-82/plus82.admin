@@ -43,7 +43,7 @@ const Login = () => {
         navigate(`/academy`);
       },
       onError: () => {
-        alert("아이디 비밀번호를 확인해주세요");
+        toast.error("아이디 비밀번호를 확인해주세요");
       },
     });
   };
