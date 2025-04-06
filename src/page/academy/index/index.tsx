@@ -30,7 +30,7 @@ import {
     }, [error]);
   
     const handleCreateClick = () => {
-      navigate("/board/create");
+      navigate("/academy/create");
     };
   
     const handleRowClick = (postId: number) => {

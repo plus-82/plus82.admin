@@ -1,5 +1,7 @@
 import { z } from "zod";
 
+import { LocationTypes } from "./code";
+
 // 공통 Academy 스키마
 export const AcademySchema = z.object({
   id: z.number(),
@@ -9,25 +11,7 @@ export const AcademySchema = z.object({
   representativeEmail: z.string().email(),
   description: z.string().nullable().optional(), // 상세 조회에서만 사용
   businessRegistrationNumber: z.string(),
-  locationType: z.enum([
-    "SEOUL",
-    "BUSAN",
-    "DAEGU",
-    "INCHEON",
-    "GWANGJU",
-    "DAEJEON",
-    "ULSAN",
-    "SEJONG",
-    "GYEONGGI",
-    "GANGWON",
-    "CHUNGBUK",
-    "CHUNGNAM",
-    "JEONBUK",
-    "JEONNAM",
-    "GYEONGBUK",
-    "GYEONGNAM",
-    "JEJU",
-  ]),
+  locationType: z.enum(LocationTypes),
   detailedAddress: z.string(),
   byAdmin: z.boolean().optional(), // 목록 조회에서만 사용
   lat: z.number().optional(), // 상세 조회에서만 사용
@@ -73,6 +57,24 @@ export const AcademyDetailSchema = AcademySchema.pick({
   imageUrls: true,
 });
 
-// 목록 조회와 상세 조회 타입
+export const CreateAcademySchema = z.object({
+  name: z.string().min(1, "학원 이름을 입력해주세요"),
+  nameEn: z.string().min(1, "학원 이름(영문)을 입력해주세요"),
+  representativeName: z.string().min(1, "대표자명을 입력해주세요"),
+  representativeEmail: z.string().email("이메일 형식이 아닙니다").min(1, "대표 메일을 입력해주세요"),
+  description: z.string().optional(),
+  locationType: AcademySchema.shape.locationType,
+  detailedAddress: z.string().min(1, "상세 주소를 입력해주세요"),
+  lat: z.number(),
+  lng: z.number(),
+  forKindergarten: z.boolean(),
+  forElementary: z.boolean(),
+  forMiddleSchool: z.boolean(),
+  forHighSchool: z.boolean(),
+  forAdult: z.boolean(),
+  images: z.any(), // multipart/form-data로 업로드되는 파일. 서버에서 multer 등으로 처리됨
+});
+
 export type AcademyListItem = z.infer<typeof AcademyListItemSchema>;
 export type AcademyDetail = z.infer<typeof AcademyDetailSchema>;
+export type CreateAcademyInput = z.infer<typeof CreateAcademySchema>;

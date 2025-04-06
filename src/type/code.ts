@@ -1,0 +1,20 @@
+// 지역 타입 배열 (Select 박스 옵션용)
+export const LocationTypes = [
+    "SEOUL",
+    "BUSAN",
+    "DAEGU",
+    "INCHEON",
+    "GWANGJU",
+    "DAEJEON",
+    "ULSAN",
+    "SEJONG",
+    "GYEONGGI",
+    "GANGWON",
+    "CHUNGBUK",
+    "CHUNGNAM",
+    "JEONBUK",
+    "JEONNAM",
+    "GYEONGBUK",
+    "GYEONGNAM",
+    "JEJU",
+  ] as const;
