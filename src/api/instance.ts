@@ -126,6 +126,21 @@ class CustomAxios {
     return commonResponse.data;
   }
 
+  async postMultipart<T>({
+    url,
+    data,
+    useAuth = true,
+  }: AxiosMethodType & { useAuth?: boolean }): Promise<T> {
+    const headers = this.addAuth(
+      { "Content-Type": ContentType.MULTIPART },
+      useAuth
+    );
+
+    const commonResponse: SuccessResponse<T> = await this.instance.post(url, data, { headers });
+
+    return commonResponse.data;
+  }
+
   async put<T>({
     url,
     contentType,
@@ -175,6 +190,8 @@ class CustomAxios {
 
 // const baseURL = `${window.location.origin}/api/`;
 const baseURL = `http://localhost:8080/api/v1/`;
+// const baseURL = `https://dev.back.plus82.co/api/v1/`;
+
 
 const http = new CustomAxios(baseURL);
 
