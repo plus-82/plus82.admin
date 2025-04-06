@@ -1,5 +1,6 @@
-import type { SignInRequest, SignInResponse } from "../../type/auth";
 import http from "../instance";
+
+import type { SignInRequest, SignInResponse } from "../../type/auth";
 
 // API 엔드포인트
 const AUTH_API = {
@@ -21,7 +22,7 @@ export const authApi = {
         useAuth: false,
       });
       return response;
-    } catch (error) {
+    } catch {
       // TODO : responseCode 분기
       throw new Error("로그인 실패");
     }
