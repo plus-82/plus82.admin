@@ -17,6 +17,13 @@ export const academyApi = {
     });
   },
 
+  // 학원 상세 조회
+  getDetail: async (academyId: number): Promise<AcademyListItem> => {
+    return await http.get<AcademyListItem>({
+      url: `${ACADEMY_API.BASE}/${academyId}/by-admin`,
+    });
+  },
+
   // 학원 생성
   createAcademy: async (data: CreateAcademyInput): Promise<void> => {
     const formData = new FormData();

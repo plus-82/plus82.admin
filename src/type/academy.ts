@@ -43,6 +43,7 @@ export const AcademyDetailSchema = AcademySchema.pick({
   name: true,
   nameEn: true,
   representativeName: true,
+  representativeEmail: true,
   description: true,
   businessRegistrationNumber: true,
   locationType: true,
