@@ -12,6 +12,8 @@ import {
 } from '@mui/material';
 import React, { MouseEvent } from 'react';
 import { useNavigate, useLocation } from 'react-router-dom';
+import { toast } from "react-toastify";
+import { removeCookie } from "typescript-cookie";
 
 // 페이지 타입 정의
 interface Page {
@@ -41,6 +43,13 @@ const NavigationBar = () => {
     navigate(path);
     handleCloseNavMenu();
   };
+
+  const onLogout = () => {
+    removeCookie("Authorization");
+    navigate("/");
+    toast.success("로그아웃 되었습니다");
+  };
+
 
   return (
     <AppBar position="static">
@@ -130,7 +139,7 @@ const NavigationBar = () => {
 
           {/* 로그인/로그아웃 버튼 */}
           <Box sx={{ flexGrow: 0 }}>
-            <Button color="inherit">로그아웃</Button>
+            <Button color="inherit" onClick={onLogout}>로그아웃</Button>
           </Box>
         </Toolbar>
       </Container>
