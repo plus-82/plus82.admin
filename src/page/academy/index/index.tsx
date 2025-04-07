@@ -34,7 +34,7 @@ import {
     };
   
     const handleRowClick = (postId: number) => {
-      navigate(`/board/${postId}`);
+      navigate(`/academy/${postId}`);
     };
   
     if (isLoading) {
