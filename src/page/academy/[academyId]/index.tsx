@@ -105,7 +105,27 @@ import {
           </Typography>
           <Typography variant="body2" sx={{ mb: 1 }}>
             이미지: {academy.imageUrls?.length || 0}개
-          </Typography>
+           </Typography>
+           {academy.imageUrls && academy.imageUrls.length > 0 && (
+           <Box
+               sx={{
+               display: "flex",
+               flexWrap: "wrap",
+               gap: 2,
+               mb: 2,
+               }}
+           >
+               {academy.imageUrls.map((url, index) => (
+               <Box key={index} sx={{ width: 150, border: "1px solid #ccc", overflow: "hidden" }}>
+                   <img
+                   src={"https://d1zl1w0yhwh5x4.cloudfront.net/" + url}
+                   alt={`학원 이미지 ${index + 1}`}
+                   style={{ width: "100%", height: "100%", objectFit: "cover" }}
+                   />
+               </Box>
+               ))}
+           </Box>
+           )}
           <Box sx={{ display: "flex", gap: 2, justifyContent: "flex-end", mt: 3 }}>
             <Button variant="outlined" onClick={() => navigate("/academy")}>
               목록

@@ -1,6 +1,6 @@
 import http from "../instance";
 
-import type { AcademyListItem, CreateAcademyInput } from "../../type/academy";
+import type { AcademyListItem, CreateAcademyInput, AcademyDetail } from "../../type/academy";
 
 // API 엔드포인트
 const ACADEMY_API = {
@@ -18,8 +18,8 @@ export const academyApi = {
   },
 
   // 학원 상세 조회
-  getDetail: async (academyId: number): Promise<AcademyListItem> => {
-    return await http.get<AcademyListItem>({
+  getDetail: async (academyId: number): Promise<AcademyDetail> => {
+    return await http.get<AcademyDetail>({
       url: `${ACADEMY_API.BASE}/${academyId}/by-admin`,
     });
   },
