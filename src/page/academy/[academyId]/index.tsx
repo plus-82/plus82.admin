@@ -7,7 +7,7 @@ import {
     Divider,
     CircularProgress,
   } from "@mui/material";
-  import { /*useMutation,*/ useQuery } from "@tanstack/react-query";
+  import { useQuery } from "@tanstack/react-query";
   import { isNil } from "lodash-es";
   import { useEffect } from "react";
   import { useNavigate, useParams } from "react-router-dom";
@@ -30,23 +30,6 @@ import {
         navigate("/academy");
       }
     }, [academyId, error, navigate]);
-  
-    // const deleteAcademy = useMutation({
-    //   mutationFn: academyApi.deleteAcademy,
-    // });
-  
-    // const handleDelete = async () => {
-    //   if (!window.confirm("정말 삭제하시겠습니까?")) return;
-  
-    //   deleteAcademy.mutate(Number(academyId), {
-    //     onSuccess: () => {
-    //       navigate("/academy");
-    //     },
-    //     onError: () => {
-    //       alert("학원 삭제에 실패했습니다.");
-    //     },
-    //   });
-    // };
   
     if (isLoading) {
       return (
@@ -130,20 +113,9 @@ import {
             <Button variant="outlined" onClick={() => navigate("/academy")}>
               목록
             </Button>
-            <Button
-              variant="contained"
-              onClick={() => navigate(`/academy/${academyId}/edit`)}
-            >
+            <Button variant="contained" onClick={() => navigate(`/academy/${academyId}/edit`)}>
               수정
             </Button>
-            {/* <Button
-              variant="contained"
-              color="error"
-              onClick={handleDelete}
-              disabled={deleteAcademy.isLoading}
-            >
-              {deleteAcademy.isLoading ? "삭제 중..." : "삭제"}
-            </Button> */}
           </Box>
         </Paper>
       </Container>
