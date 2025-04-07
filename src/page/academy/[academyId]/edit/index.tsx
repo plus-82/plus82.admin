@@ -14,7 +14,7 @@ import {
   FormControlLabel,
 } from "@mui/material";
 import { useQuery, useMutation } from "@tanstack/react-query";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { useForm } from "react-hook-form";
 import { useNavigate, useParams } from "react-router-dom";
 import { toast } from "react-toastify";
@@ -38,6 +38,8 @@ const EditAcademy = () => {
     register,
     handleSubmit,
     formState: { errors },
+    watch, // watch 추가
+    setValue, // setValue 추가
   } = useForm<CreateAcademyInput>({
     resolver: zodResolver(CreateAcademySchema),
     defaultValues: {
@@ -55,27 +57,28 @@ const EditAcademy = () => {
       forMiddleSchool: false,
       forHighSchool: false,
       forAdult: false,
-    },
-    values: academy
-      ? {
-          name: academy.name,
-          nameEn: academy.nameEn,
-          representativeName: academy.representativeName,
-          representativeEmail: academy.representativeEmail,
-          description: academy.description || "",
-          locationType: academy.locationType,
-          detailedAddress: academy.detailedAddress,
-          lat: academy.lat ?? 0,
-          lng: academy.lng ?? 0,
-          forKindergarten: academy.forKindergarten ?? false,
-          forElementary: academy.forElementary ?? false,
-          forMiddleSchool: academy.forMiddleSchool ?? false,
-          forHighSchool: academy.forHighSchool ?? false,
-          forAdult: academy.forAdult ?? false,
-          images: academy.imageUrls || [],
-        }
-      : undefined,
+    }
   });
+
+  // academy 데이터가 로드되면 폼 값 설정
+  useEffect(() => {
+    if (academy) {
+      setValue("name", academy.name);
+      setValue("nameEn", academy.nameEn);
+      setValue("representativeName", academy.representativeName);
+      setValue("representativeEmail", academy.representativeEmail);
+      setValue("description", academy.description || "");
+      setValue("locationType", academy.locationType);
+      setValue("detailedAddress", academy.detailedAddress);
+      setValue("lat", academy.lat ?? 0);
+      setValue("lng", academy.lng ?? 0);
+      setValue("forKindergarten", academy.forKindergarten ?? false);
+      setValue("forElementary", academy.forElementary ?? false);
+      setValue("forMiddleSchool", academy.forMiddleSchool ?? false);
+      setValue("forHighSchool", academy.forHighSchool ?? false);
+      setValue("forAdult", academy.forAdult ?? false);
+    }
+  }, [academy, setValue]);
 
   const updateAcademy = useMutation({
     mutationFn: (data: CreateAcademyInput) => academyApi.updateAcademy(Number(academyId), data),
@@ -109,7 +112,6 @@ const EditAcademy = () => {
       </Container>
     );
   }
-  
 
   return (
     <Container maxWidth="md">
@@ -159,7 +161,7 @@ const EditAcademy = () => {
           <Select
             labelId="locationType-label"
             label="지역"
-            defaultValue=""
+            value={watch("locationType") || ""} // defaultValue 대신 value 사용
             {...register("locationType")}
           >
             {LocationTypes.map((type) => (
@@ -203,23 +205,38 @@ const EditAcademy = () => {
 
         <Box display="flex" flexDirection="column" gap={1}>
           <FormControlLabel
-            control={<Checkbox {...register("forKindergarten")} />}
+            control={<Checkbox 
+              {...register("forKindergarten")} 
+              checked={watch("forKindergarten")} 
+            />}
             label="유아 대상"
           />
           <FormControlLabel
-            control={<Checkbox {...register("forElementary")} />}
+            control={<Checkbox 
+              {...register("forElementary")} 
+              checked={watch("forElementary")}
+            />}
             label="초등학생 대상"
           />
           <FormControlLabel
-            control={<Checkbox {...register("forMiddleSchool")} />}
+            control={<Checkbox 
+              {...register("forMiddleSchool")} 
+              checked={watch("forMiddleSchool")}
+            />}
             label="중학생 대상"
           />
           <FormControlLabel
-            control={<Checkbox {...register("forHighSchool")} />}
+            control={<Checkbox 
+              {...register("forHighSchool")} 
+              checked={watch("forHighSchool")} 
+            />}
             label="고등학생 대상"
           />
           <FormControlLabel
-            control={<Checkbox {...register("forAdult")} />}
+            control={<Checkbox 
+              {...register("forAdult")} 
+              checked={watch("forAdult")}
+            />}
             label="성인 대상"
           />
         </Box>
