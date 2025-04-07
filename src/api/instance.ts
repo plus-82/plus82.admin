@@ -141,6 +141,21 @@ class CustomAxios {
     return commonResponse.data;
   }
 
+  async putMultipart<T>({
+    url,
+    data,
+    useAuth = true,
+  }: AxiosMethodType & { useAuth?: boolean }): Promise<T> {
+    const headers = this.addAuth(
+      { "Content-Type": ContentType.MULTIPART },
+      useAuth
+    );
+
+    const commonResponse: SuccessResponse<T> = await this.instance.put(url, data, { headers });
+
+    return commonResponse.data;
+  }
+
   async put<T>({
     url,
     contentType,
