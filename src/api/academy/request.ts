@@ -90,8 +90,8 @@ export const academyApi = {
         data: formData
       });
     } catch (error) {
-      console.error("Error creating academy:", error);
-      throw new Error("Failed to create academy");
+      console.error("Error updating academy:", error);
+      throw new Error("Failed to update academy");
     }
   },
 };
