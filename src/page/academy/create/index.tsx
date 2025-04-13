@@ -169,7 +169,7 @@ const NewAcademy = () => {
 
         <Box display="flex" flexDirection="column" gap={1}>
           <FormControlLabel
-            control={<Checkbox{...register("forKindergarten")}/>}
+            control={<Checkbox {...register("forKindergarten")} />}
             label="유아 대상"
           />
           <FormControlLabel
