@@ -110,6 +110,46 @@ class CustomAxios {
     return commonResponse.data;
   }
 
+  async getPaged<T>({ url, data, useAuth = true }: AxiosMethodType & { useAuth?: boolean }): Promise<{
+    content: T[];
+    pageable: {
+      pageNumber: number;
+      pageSize: number;
+      offset: number;
+      paged: boolean;
+      unpaged: boolean;
+    };
+    totalElements: number;
+    totalPages: number;
+    first: boolean;
+    last: boolean;
+    numberOfElements: number;
+    empty: boolean;
+  }> {
+    const queryParam = qs.stringify(data, { arrayFormat: "repeat" });
+    const newUrl = queryParam ? `${url}?${queryParam}` : url;
+
+    const headers = this.addAuth({}, useAuth);
+    const commonResponse: SuccessResponse<{
+      content: T[];
+      pageable: {
+        pageNumber: number;
+        pageSize: number;
+        offset: number;
+        paged: boolean;
+        unpaged: boolean;
+      };
+      totalElements: number;
+      totalPages: number;
+      first: boolean;
+      last: boolean;
+      numberOfElements: number;
+      empty: boolean;
+    }> = await this.instance.get(newUrl, { headers });
+
+    return commonResponse.data;
+  }
+
   async post<T>({
     url,
     contentType,
