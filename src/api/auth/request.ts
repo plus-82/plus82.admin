@@ -5,7 +5,7 @@ import type { SignInRequest, SignInResponse } from "../../type/auth";
 // API 엔드포인트
 const AUTH_API = {
   BASE: "/auth",
-  SIGN_IN: "/sign-in",
+  SIGN_IN: "/admin/sign-in",
 };
 
 // API 함수들
