@@ -1,6 +1,6 @@
 import { z } from "zod";
 
-export const ResumeStatus = ["SUBMITTED", "REVIEWING", "ACCEPTED" , "REJECTED"] as const;
+export const ResumeStatus = ["SUBMITTED", "REVIEWED", "ACCEPTED" , "REJECTED"] as const;
 
 export const ResumeSchema = z.object({
     id: z.number(),

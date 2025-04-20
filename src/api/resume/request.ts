@@ -11,10 +11,10 @@ const RESUME_API = {
 export const resumeApi = {
 
   // 목록 조회
-  getList: async (page: number, size: number): Promise<ResumeList> => {
+  getList: async (page: number, size: number, status?: string): Promise<ResumeList> => {
     return await http.getPaged<ResumeList>({
       url: RESUME_API.BASE,
-      data: { page, size },
+      data: { page, size, status },
     });
   },
 
