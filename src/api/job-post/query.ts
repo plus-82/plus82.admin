@@ -9,13 +9,4 @@ export const jobPostQueries = {
       queryKey: [...jobPostQueries.all, "list", page, size],
       queryFn: () => jobPostApi.getList(page, size), // page와 size를 전달
     }),
-//   details: (id: number) => [...jobPostQueries.all, "detail", id],
-//   detail: (id: number) =>
-//     queryOptions({
-//       queryKey: [...jobPostQueries.details(id), id],
-//       queryFn: () => {
-//         console.log(id)
-//         return jobPostQueries.get(id)
-//       },
-//     }),
 };

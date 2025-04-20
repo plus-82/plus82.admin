@@ -37,6 +37,7 @@ const NavigationBar = () => {
   const pages: Page[] = [
     { name: '학원 관리', path: '/academy' },
     { name: '채용공고', path: '/job-post' },
+    { name: '지원자 관리', path: '/resume' },
     { name: '테스트', path: '/board' },
   ];
 

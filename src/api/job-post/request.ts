@@ -3,7 +3,7 @@ import http from "../instance";
 import type { JobPostList, JobPostDetail, CreateJobPostInput } from "../../type/jobpost";
 
 // API 엔드포인트
-const ACADEMY_API = {
+const JOB_POST_API = {
   BASE: "/job-posts",
 };
 
@@ -13,7 +13,7 @@ export const jobPostApi = {
   // 목록 조회
   getList: async (page: number, size: number): Promise<JobPostList> => {
     return await http.getPaged<JobPostList>({
-      url: ACADEMY_API.BASE + "/by-admin",
+      url: JOB_POST_API.BASE + "/by-admin",
       data: { page, size },
     });
   },
@@ -21,7 +21,7 @@ export const jobPostApi = {
   // 상세 조회
   getDetail: async (jobPostId: number): Promise<JobPostDetail> => {
     return await http.get<JobPostDetail>({
-      url: `${ACADEMY_API.BASE}/${jobPostId}`,
+      url: `${JOB_POST_API.BASE}/${jobPostId}`,
     });
   },
 
@@ -29,7 +29,7 @@ export const jobPostApi = {
   createJobPost: async (data: CreateJobPostInput): Promise<void> => {
     try {
       return await http.post({
-        url: ACADEMY_API.BASE + "/by-admin/academy/" + data.academyId,
+        url: JOB_POST_API.BASE + "/by-admin/academy/" + data.academyId,
         data,
       });
     } catch (error) {
@@ -42,7 +42,7 @@ export const jobPostApi = {
   updateJobPost: async (jobPostId: number, data: CreateJobPostInput): Promise<void> => {
     try {
     return await http.put({
-        url: `${ACADEMY_API.BASE}/${jobPostId}/by-admin/academy/${data.academyId}`,
+        url: `${JOB_POST_API.BASE}/${jobPostId}/by-admin/academy/${data.academyId}`,
         data,
       });
     } catch (error) {
