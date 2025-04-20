@@ -4,12 +4,21 @@ import { z } from "zod";
 export const JobPostSchema = z.object({
   id: z.number(),
   title: z.string().min(1, "공고 제목을 입력해주세요"),
+  jobDescription: z.string().min(1, "직무 내용을 입력해주세요"),
+  requiredQualification: z.string().min(1, "필수 자격 요건을 입력해주세요"),
+  preferredQualification: z.string().optional(),
+  benefits: z.string().min(1, "복리후생을 입력해주세요"),
+  salary: z.number().min(0, "급여를 입력해주세요"),
+  salaryNegotiable: z.boolean(),
+  jobStartDate: z.string().refine(
+    (date) => !isNaN(Date.parse(date)),
+    "유효한 날짜를 입력해주세요"
+  ),
   dueDate: z.string().refine(
     (date) => !isNaN(Date.parse(date)),
     "유효한 날짜를 입력해주세요"
-  ), // 마감일
-  createdAt: z.string(), // 생성일
-  salary: z.number().min(0, "급여를 입력해주세요"), // 급여
+  ),
+  createdAt: z.string(),
   forKindergarten: z.boolean(),
   forElementary: z.boolean(),
   forMiddleSchool: z.boolean(),
@@ -18,8 +27,6 @@ export const JobPostSchema = z.object({
   closed: z.boolean(), // 상태 (마감 여부)
   academyId: z.number(),
   academyName: z.string(),
-  locationType: z.string().nullable(), // 지역 타입 (nullable)
-  imageUrls: z.array(z.string().url()).optional(), // 이미지 URL 배열
 });
 
 // 목록 조회 스키마
@@ -54,38 +61,55 @@ export const JobPostListSchema = z.object({
 });
 
 // 상세 조회 스키마
-export const JobPostDetailSchema = JobPostSchema.pick({
-  id: true,
+export const JobPostDetailSchema = z.object({
+  id: z.number(),
+  title: z.string(),
+  jobDescription: z.string(),
+  requiredQualification: z.string(),
+  preferredQualification: z.string().nullable(),
+  benefits: z.string(),
+  salary: z.number(),
+  salaryNegotiable: z.boolean(),
+  jobStartDate: z.string(),
+  dueDate: z.string(),
+  forKindergarten: z.boolean(),
+  forElementary: z.boolean(),
+  forMiddleSchool: z.boolean(),
+  forHighSchool: z.boolean(),
+  forAdult: z.boolean(),
+  academyId: z.number(),
+  academyName: z.string(),
+  academyNameEn: z.string(),
+  academyRepresentativeName: z.string(),
+  academyDescription: z.string().nullable(),
+  academyLocationType: z.string(),
+  lat: z.number(),
+  lng: z.number(),
+});
+
+// 생성/수정 요청 스키마
+export const CreateJobPostSchema = JobPostSchema.pick({
   title: true,
+  jobDescription: true,
+  requiredQualification: true,
+  preferredQualification: true,
+  benefits: true,
+  salary: true,
+  salaryNegotiable: true,
+  jobStartDate: true,
   dueDate: true,
   forKindergarten: true,
   forElementary: true,
   forMiddleSchool: true,
   forHighSchool: true,
   forAdult: true,
-  closed: true,
-  academyId: true,
-  academyName: true,
-  locationType: true,
-  imageUrls: true,
+}).extend({
+  academyId: z.number().min(1, "학원을 선택해주세요"),
 });
 
-
-// // 생성/수정 요청 스키마
-// export const CreateJobPostSchema = JobPostSchema.omit({
-//   id: true,
-// }).extend({
-//   title: z.string().min(1, "공고 제목을 입력해주세요"),
-//   dueDate: z.string().refine(
-//     (date) => !isNaN(Date.parse(date)),
-//     "유효한 날짜를 입력해주세요"
-//   ),
-//   imageFiles: z.any().optional(), // 이미지 파일 업로드용
-// });
-
 // 타입 정의
-// export type JobPost = z.infer<typeof JobPostSchema>;
+export type JobPost = z.infer<typeof JobPostSchema>;
 export type JobPostListItem = z.infer<typeof JobPostListItemSchema>;
 export type JobPostDetail = z.infer<typeof JobPostDetailSchema>;
 export type JobPostList = z.infer<typeof JobPostListSchema>;
-// export type CreateJobPostInput = z.infer<typeof CreateJobPostSchema>;
+export type CreateJobPostInput = z.infer<typeof CreateJobPostSchema>;

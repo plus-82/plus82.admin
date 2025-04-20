@@ -1,6 +1,6 @@
 import http from "../instance";
 
-import type { JobPostList, JobPostDetail } from "../../type/jobpost";
+import type { JobPostList, JobPostDetail, CreateJobPostInput } from "../../type/jobpost";
 
 // API 엔드포인트
 const ACADEMY_API = {
@@ -23,6 +23,19 @@ export const jobPostApi = {
     return await http.get<JobPostDetail>({
       url: `${ACADEMY_API.BASE}/${jobPostId}`,
     });
+  },
+
+  // 생성
+  createJobPost: async (data: CreateJobPostInput): Promise<void> => {
+    try {
+      return await http.post({
+        url: ACADEMY_API.BASE + "/by-admin/academy/" + data.academyId,
+        data,
+      });
+    } catch (error) {
+      console.error("Error creating job post:", error);
+      throw new Error("Failed to create job post");
+    }
   },
 
 };

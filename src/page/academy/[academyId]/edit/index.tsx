@@ -38,8 +38,8 @@ const EditAcademy = () => {
     register,
     handleSubmit,
     formState: { errors },
-    watch, // watch 추가
-    setValue, // setValue 추가
+    watch,
+    setValue,
   } = useForm<CreateAcademyInput>({
     resolver: zodResolver(CreateAcademySchema),
     defaultValues: {
@@ -161,7 +161,7 @@ const EditAcademy = () => {
           <Select
             labelId="locationType-label"
             label="지역"
-            value={watch("locationType") || ""} // defaultValue 대신 value 사용
+            value={watch("locationType") || ""}
             {...register("locationType")}
           >
             {LocationTypes.map((type) => (
