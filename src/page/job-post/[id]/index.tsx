@@ -17,6 +17,7 @@ import { useEffect, useState } from "react";
 
 import { jobPostApi } from "@/api/job-post/request";
 import { CreateJobPostSchema, type CreateJobPostInput } from "@/type/jobpost";
+import { toast } from "react-toastify";
 
 const JobPostDetail = () => {
   const navigate = useNavigate();
@@ -62,6 +63,7 @@ const JobPostDetail = () => {
   const updateJobPost = useMutation({
     mutationFn: (data: CreateJobPostInput) => jobPostApi.updateJobPost(Number(jobPostId), data),
     onSuccess: () => {
+      toast.success("공고가 성공적으로 추가되었습니다.");
       navigate("/job-post");
     },
     onError: () => {
