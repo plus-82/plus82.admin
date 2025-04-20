@@ -38,4 +38,17 @@ export const jobPostApi = {
     }
   },
 
+  // 수정
+  updateJobPost: async (jobPostId: number, data: CreateJobPostInput): Promise<void> => {
+    try {
+    return await http.put({
+        url: `${ACADEMY_API.BASE}/${jobPostId}/by-admin/academy/${data.academyId}`,
+        data,
+      });
+    } catch (error) {
+      console.error("Error updating job post:", error);
+      throw new Error("Failed to update job post");
+    }
+  },
+
 };

@@ -10,6 +10,7 @@ import CreateBoard from "./page/board/create";
 import BoardList from "./page/board/index";
 import Login from "./page/index/login";
 import JobPostList from "./page/job-post";
+import JobPostDetail from "./page/job-post/[id]";
 import CreateJobPost from "./page/job-post/create";
 
 import "@fontsource/roboto/300.css";
@@ -29,6 +30,7 @@ const App = () => {
         <Route path="/academy/:academyId/edit" element={<EditAcademy />} />
         <Route path="/job-post" element={<JobPostList />} />
         <Route path="/job-post/create" element={<CreateJobPost />} />
+        <Route path="/job-post/:jobPostId" element={<JobPostDetail />} />
         <Route path="/board" element={<BoardList />} />
         <Route path="/board/create" element={<CreateBoard />} />
         <Route path="/board/:boardId" element={<BoardDetail />} />
