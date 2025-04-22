@@ -12,6 +12,7 @@ import {
   FormControl,
   Checkbox,
   FormControlLabel,
+  Avatar,
 } from "@mui/material";
 import { useMutation } from "@tanstack/react-query";
 import { useState } from "react";
@@ -45,6 +46,7 @@ const defaultValues: CreateAcademyInput = {
 const NewAcademy = () => {
   const navigate = useNavigate();
   const [selectedFiles, setSelectedFiles] = useState<File[]>([]);
+  const [previewImages, setPreviewImages] = useState<string[]>([]);
 
   const {
     register,
@@ -75,6 +77,17 @@ const NewAcademy = () => {
       ...data,
       images: selectedFiles,
     });
+  };
+
+  const handleImageChange = (event: React.ChangeEvent<HTMLInputElement>) => {
+    if (event.target.files) {
+      const fileList = Array.from(event.target.files);
+      setSelectedFiles(fileList);
+
+      // 미리보기 이미지 URL 생성
+      const previewUrls = fileList.map(file => URL.createObjectURL(file));
+      setPreviewImages(previewUrls);
+    }
   };
 
   return (
@@ -197,17 +210,27 @@ const NewAcademy = () => {
             hidden
             multiple
             accept="image/*"
-            onChange={(e) => {
-              if (e.target.files) {
-                const fileList = Array.from(e.target.files);
-                setSelectedFiles(fileList);
-              }
-            }}
+            onChange={handleImageChange}
           />
         </Button>
         <Typography variant="body2">
           선택한 파일 수: {selectedFiles.length}
         </Typography>
+
+        {/* 이미지 미리보기 */}
+        {previewImages.length > 0 && (
+          <Box sx={{ display: 'flex', gap: 2, flexWrap: 'wrap' }}>
+            {previewImages.map((previewUrl, index) => (
+              <Avatar
+                key={index}
+                src={previewUrl}
+                alt={`미리보기 ${index + 1}`}
+                sx={{ width: 100, height: 100 }}
+                variant="rounded"
+              />
+            ))}
+          </Box>
+        )}
 
         <Box display="flex" gap={2} mt={2}>
           <Button variant="outlined" onClick={() => navigate("/academy")}>

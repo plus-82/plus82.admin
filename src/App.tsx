@@ -1,9 +1,8 @@
 import { BrowserRouter, Routes, Route } from "react-router-dom";
 
-import AcademyDetailPage from "./page/academy/[academyId]";
-import EditAcademy from "./page/academy/[academyId]/edit";
 import CreateAcademy from "./page/academy/create";
 import AcademyList from "./page/academy/index";
+import EditAcademy from "./page/academy/[academyId]";
 import BoardDetail from "./page/board/[boardId]";
 import EditBoard from "./page/board/[boardId]/edit";
 import CreateBoard from "./page/board/create";
@@ -27,8 +26,7 @@ const App = () => {
         <Route index element={<Login />} />
         <Route path="/academy" element={<AcademyList />} />
         <Route path="/academy/create" element={<CreateAcademy />} />
-        <Route path="/academy/:academyId" element={<AcademyDetailPage />} />
-        <Route path="/academy/:academyId/edit" element={<EditAcademy />} />
+        <Route path="/academy/:academyId" element={<EditAcademy />} />
         <Route path="/job-post" element={<JobPostList />} />
         <Route path="/job-post/create" element={<CreateJobPost />} />
         <Route path="/job-post/:jobPostId" element={<JobPostDetail />} />
