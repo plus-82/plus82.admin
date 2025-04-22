@@ -26,8 +26,7 @@ import { LocationTypes } from "@/type/code";
 const EditAcademy = () => {
   const navigate = useNavigate();
   const { academyId } = useParams();
-  const [selectedFiles, setSelectedFiles] = useState<File[]>([]);
-  const [previewImages, setPreviewImages] = useState<string[]>([]);
+  const [imageFiles, setImageFiles] = useState<{ file: File; previewUrl: string }[]>([]);
 
   const { data: academy, isLoading, error } = useQuery({
     queryKey: ["academyDetail", academyId],
@@ -81,7 +80,10 @@ const EditAcademy = () => {
       
       // 기존 이미지 URL을 미리보기에 추가
       if (academy.imageUrls) {
-        setPreviewImages(academy.imageUrls);
+        setImageFiles(academy.imageUrls.map(url => ({
+          file: new File([], ""),
+          previewUrl: `https://d1zl1w0yhwh5x4.cloudfront.net/${url}`
+        })));
       }
     }
   }, [academy, setValue]);
@@ -98,20 +100,19 @@ const EditAcademy = () => {
   });
 
   const onSubmit = (data: CreateAcademyInput) => {
-    if (selectedFiles.length > 0) {
-      data.images = selectedFiles;
+    if (imageFiles.length > 0) {
+      data.images = imageFiles.map(item => item.file);
     }
     updateAcademy.mutate(data);
   };
 
   const handleImageChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     if (event.target.files) {
-      const fileList = Array.from(event.target.files);
-      setSelectedFiles(fileList);
-
-      // 미리보기 이미지 URL 생성 (기존 이미지는 제거하고 새 이미지만 표시)
-      const previewUrls = fileList.map(file => URL.createObjectURL(file));
-      setPreviewImages(previewUrls);
+      const newFiles = Array.from(event.target.files).map(file => ({
+        file,
+        previewUrl: URL.createObjectURL(file)
+      }));
+      setImageFiles(newFiles);
     }
   };
 
@@ -269,46 +270,21 @@ const EditAcademy = () => {
           />
         </Button>
         <Typography variant="body2">
-          선택한 새 파일 수: {selectedFiles.length}
+          선택한 파일 수: {imageFiles.length}
         </Typography>
 
-        {/* 기존 이미지 */}
-        {academy?.imageUrls && academy.imageUrls.length > 0 && (
-          <Box>
-            <Typography variant="subtitle1" gutterBottom>
-              기존 이미지
-            </Typography>
-            <Box sx={{ display: 'flex', gap: 2, flexWrap: 'wrap' }}>
-              {academy.imageUrls.map((url, index) => (
-                <Box key={index} sx={{ width: 150, border: "1px solid #ccc", overflow: "hidden" }}>
-                  <img
-                    src={`https://d1zl1w0yhwh5x4.cloudfront.net/${url}`}
-                    alt={`기존 이미지 ${index + 1}`}
-                    style={{ width: "100%", height: "100%", objectFit: "cover" }}
-                  />
-                </Box>
-              ))}
-            </Box>
-          </Box>
-        )}
-
-        {/* 새로 선택한 이미지 미리보기 */}
-        {previewImages.length > 0 && (
-          <Box>
-            <Typography variant="subtitle1" gutterBottom>
-              새로 선택한 이미지
-            </Typography>
-            <Box sx={{ display: 'flex', gap: 2, flexWrap: 'wrap' }}>
-              {previewImages.map((previewUrl, index) => (
-                <Box key={index} sx={{ width: 150, border: "1px solid #ccc", overflow: "hidden" }}>
-                  <img
-                    src={previewUrl}
-                    alt={`새 이미지 ${index + 1}`}
-                    style={{ width: "100%", height: "100%", objectFit: "cover" }}
-                  />
-                </Box>
-              ))}
-            </Box>
+        {/* 이미지 미리보기 */}
+        {imageFiles.length > 0 && (
+          <Box sx={{ display: 'flex', gap: 2, flexWrap: 'wrap' }}>
+            {imageFiles.map((item, index) => (
+              <Box key={index} sx={{ width: 150, border: "1px solid #ccc", overflow: "hidden" }}>
+                <img
+                  src={item.previewUrl}
+                  alt={`미리보기 ${index + 1}`}
+                  style={{ width: "100%", height: "100%", objectFit: "cover" }}
+                />
+              </Box>
+            ))}
           </Box>
         )}
 
