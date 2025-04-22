@@ -11,49 +11,58 @@ import {
     TableRow,
     Button,
     CircularProgress,
-  } from "@mui/material";
-  import { useQuery } from "@tanstack/react-query";
-  import { useEffect } from "react";
-  import { useNavigate } from "react-router-dom";
-  
-  import { academyQueries } from "@/api/academy/query";
-  
-  const AcademyList = () => {
-    const navigate = useNavigate();
-  
-    const { data: academies, isLoading, error } = useQuery(academyQueries.list());
-  
-    useEffect(() => {
-      if (error) {
-        alert("게시글 목록을 불러오는데 실패했습니다.");
-      }
-    }, [error]);
-  
-    const handleCreateClick = () => {
-      navigate("/board/create");
-    };
-  
-    const handleRowClick = (postId: number) => {
-      navigate(`/board/${postId}`);
-    };
-  
-    if (isLoading) {
-      return (
+} from "@mui/material";
+import { useQuery } from "@tanstack/react-query";
+import { useEffect } from "react";
+import { useNavigate } from "react-router-dom";
+
+import { academyQueries } from "@/api/academy/query";
+import NavigationBar from "@/shared/component/NavigationBar";
+
+const AcademyList = () => {
+  const navigate = useNavigate();
+
+  const { data: academies, isLoading, error } = useQuery(academyQueries.list());
+
+  useEffect(() => {
+    if (error) {
+      alert("게시글 목록을 불러오는데 실패했습니다.");
+    }
+  }, [error]);
+
+  const handleCreateClick = () => {
+    navigate("/academy/create");
+  };
+
+  const handleRowClick = (academyId: number) => {
+    navigate(`/academy/${academyId}`);
+  };
+
+  if (isLoading) {
+    return (
+      <>
+        <NavigationBar />
         <Container sx={{ display: "flex", justifyContent: "center", mt: 4 }}>
           <CircularProgress />
         </Container>
-      );
-    }
-  
-    if (error) {
-      return (
+      </>
+    );
+  }
+
+  if (error) {
+    return (
+      <>
+        <NavigationBar />
         <Container sx={{ mt: 4 }}>
           <Typography color="error">게시글을 불러오는데 실패했습니다.</Typography>
         </Container>
-      );
-    }
-  
-    return (
+      </>
+    );
+  }
+
+  return (
+    <>
+      <NavigationBar />
       <Container maxWidth="lg" sx={{ mt: 4 }}>
 
         <Box sx={{ display: "flex", justifyContent: "space-between", alignItems: "center", mb: 2 }}>
@@ -101,8 +110,8 @@ import {
           </Table>
         </TableContainer>
       </Container>
-    );
-  };
-  
-  export default AcademyList;
-  
+    </>
+  );
+};
+
+export default AcademyList;
