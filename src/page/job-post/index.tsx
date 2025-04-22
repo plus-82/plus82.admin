@@ -65,7 +65,6 @@ import {
     return (
       <>
         <NavigationBar />
-        <h1></h1>
         <Container maxWidth="lg" sx={{ mt: 4 }}>
           <Box sx={{ display: "flex", justifyContent: "space-between", alignItems: "center", mb: 2 }}>
             <Typography variant="h4" component="h1" gutterBottom>
