@@ -22,6 +22,7 @@ export const AcademySchema = z.object({
   forHighSchool: z.boolean().optional(), // 상세 조회에서만 사용
   forAdult: z.boolean().optional(), // 상세 조회에서만 사용
   imageUrls: z.array(z.string().url()).optional(), // 상세 조회에서만 사용
+  updatedAt: z.string().datetime(),
 });
 
 // 목록 조회 스키마
@@ -34,6 +35,7 @@ export const AcademyListItemSchema = AcademySchema.pick({
   businessRegistrationNumber: true,
   locationType: true,
   detailedAddress: true,
+  updatedAt: true,
   byAdmin: true,
 });
 

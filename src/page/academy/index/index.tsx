@@ -83,11 +83,8 @@ const AcademyList = () => {
             <TableHead>
               <TableRow>
                 <TableCell>번호</TableCell>
-                <TableCell>학원명</TableCell>
-                <TableCell>사업자 등록번호</TableCell>
-                <TableCell>대표자명</TableCell>
-                <TableCell>대표자 이메일</TableCell>
-                <TableCell>주소</TableCell>
+                <TableCell>학원 이름</TableCell>
+                <TableCell>수정일</TableCell>
               </TableRow>
             </TableHead>
             <TableBody>
@@ -100,10 +97,13 @@ const AcademyList = () => {
                 >
                   <TableCell>{academies.id}</TableCell>
                   <TableCell>{academies.name} ({academies.nameEn})</TableCell>
-                  <TableCell>{academies.businessRegistrationNumber}</TableCell>
-                  <TableCell>{academies.representativeName}</TableCell>
-                  <TableCell>{academies.representativeEmail}</TableCell>
-                  <TableCell>{academies.locationType} / {academies.detailedAddress}</TableCell>
+                  <TableCell>
+                    {new Date(academies.updatedAt).toLocaleDateString('ko-KR', {
+                      year: 'numeric',
+                      month: '2-digit',
+                      day: '2-digit',
+                    })}
+                  </TableCell>
                 </TableRow>
               ))}
             </TableBody>
