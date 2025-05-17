@@ -6,7 +6,7 @@ on:
       commit_message:
         description: 'Commit message for deployment'
         required: true
-        default: 'Manual preview deployment'
+        default: 'Manual production deployment'
 
 jobs:
   build:
@@ -31,7 +31,7 @@ jobs:
           destination-github-username: 'mina-gwak'
           destination-repository-name: 'plus82.admin'
           user-email: ${{ secrets.EMAIL }}
-          commit-message: ${{ github.event.commits[0].message }}
+          commit-message: ${{ github.event.inputs.commit_message }}
           target-branch: main
 
       - name: Test get variable exported by push-to-another-repository
