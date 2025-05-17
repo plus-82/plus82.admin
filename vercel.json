@@ -3,7 +3,7 @@
     { "source": "/(.*)", "destination": "/" },
     {
       "source": "/api/:path*",
-      "destination": "https://dev.back.plus82.co/:path*"
+      "destination": "https://dev.back.plus82.co/api/:path*"
     }
   ]
 }
