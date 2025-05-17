@@ -243,8 +243,8 @@ class CustomAxios {
   }
 }
 
-// const baseURL = `${window.location.origin}/api/`;
-const baseURL = `http://localhost:8080/api/v1/`;
+const baseURL = `${window.location.origin}/api/v1/`;
+// const baseURL = `http://localhost:8080/api/v1/`;
 // const baseURL = `https://dev.back.plus82.co/api/v1/`;
 
 

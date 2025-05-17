@@ -17,9 +17,10 @@ import {
   import { useQuery } from "@tanstack/react-query";
   import { useState } from "react";
   import { useNavigate } from "react-router-dom";
-  import { ResumeListItem, ResumeStatus } from "@/type/resume";
-  import NavigationBar from "@/shared/component/NavigationBar";
+
 import { resumeApi } from "@/api/resume/request";
+  import NavigationBar from "@/shared/component/NavigationBar";
+  import { ResumeListItem, ResumeStatus } from "@/type/resume";
   
   const ALL_STATUS = "ALL";
   
@@ -43,6 +44,10 @@ import { resumeApi } from "@/api/resume/request";
         setStatus(newStatus);
         setPage(1);
       }
+    };
+
+    const handleRowClick = (resumeId: number) => {
+      navigate(`/resume/${resumeId}`);
     };
 
     if (isLoading) {
@@ -110,7 +115,7 @@ import { resumeApi } from "@/api/resume/request";
               </TableHead>
               <TableBody>
                 {data?.content.map((resume: ResumeListItem) => (
-                  <TableRow key={resume.id}>
+                  <TableRow key={resume.id} hover onClick={() => handleRowClick(resume.id)} sx={{ cursor: "pointer" }}>
                     <TableCell>{resume.academyName}</TableCell>
                     <TableCell>{resume.jobPostTitle}</TableCell>
                     <TableCell>

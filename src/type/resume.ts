@@ -53,5 +53,83 @@ export const ResumeListSchema = z.object({
     empty: z.boolean(),
   });
 
+  export enum ApplicationStatus {
+    SUBMITTED = 'SUBMITTED',
+    REVIEWED = 'REVIEWED',
+    ACCEPTED = 'ACCEPTED',
+    REJECTED = 'REJECTED',
+  }
+
+  export type JobPostRelationDetail = {
+    id: number
+    coverLetter: string
+    status: ApplicationStatus
+    submittedDate: string
+    academyMemo: string | null
+    resumeTitle: string
+    personalIntroduction: string
+    firstName: string
+    lastName: string
+    email: string
+    degree: string
+    major: string
+    genderType: 'MALE' | 'FEMALE'
+    birthDate: string
+    hasVisa: boolean
+    visaType?: 'E2' | 'OTHERS' | null
+    forKindergarten: boolean
+    forElementary: boolean
+    forMiddleSchool: boolean
+    forHighSchool: boolean
+    forAdult: boolean
+    countryId: number
+    countryNameEn: string
+    countryCode: string
+    countryCallingCode: string
+    flag: string
+    residenceCountryId: number
+    residenceCountryNameEn: string
+    residenceCountryCode: string
+    residenceCountryCallingCode: string
+    residenceFlag: string
+    userId: number
+    profileImagePath?: string | null
+    jobPostId: number
+    jobPostTitle: string
+    filePath: string | null
+    fileName: string | null
+  }
+
+  export type Resume = {
+    id: number
+    title: string
+    personalIntroduction: string
+    firstName: string
+    lastName: string
+    email: string
+    degree: string
+    major: string
+    genderType: 'MALE' | 'FEMALE'
+    birthDate: string
+    hasVisa: boolean
+    visaType?: 'E2' | 'OTHERS' | null
+    isRepresentative: boolean
+    forKindergarten: boolean
+    forElementary: boolean
+    forMiddleSchool: boolean
+    forHighSchool: boolean
+    forAdult: boolean
+    countryId: number
+    countryNameEn: string
+    residenceCountryId: number
+    residenceCountryNameEn: string
+    createdAt: string
+    updatedAt: string
+    profileImagePath?: string | null
+    filePath: string | null
+    fileName: string | null
+  }
+  
+
 export type ResumeListItem = z.infer<typeof ResumeListItemSchema>;
 export type ResumeList = z.infer<typeof ResumeListSchema>;
