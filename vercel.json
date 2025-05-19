@@ -24,6 +24,10 @@
       "source": "/api/:path*",
       "destination": "https://dev.back.plus82.co/api/:path*"
     },
+    {
+      "source": "/cdn/:path*",
+      "destination": "https://d1zl1w0yhwh5x4.cloudfront.net/:path*"
+    },
     { "source": "/(.*)", "destination": "/index.html" }
   ]
 }
