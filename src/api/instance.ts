@@ -276,9 +276,9 @@ class CustomAxios {
 }
 
 const baseURL =
-  process.env.NODE_ENV === 'development'
-    ? `${window.location.origin}/dev/api/v1/`
-    : `${window.location.origin}/api/v1/`
+  import.meta.env.ENVIRONMENT === 'production'
+    ? `${window.location.origin}/api/v1/`
+    : `${window.location.origin}/dev/api/v1/`
 
 const http = new CustomAxios(baseURL)
 
