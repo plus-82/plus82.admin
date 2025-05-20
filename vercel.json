@@ -1,6 +1,14 @@
 {
   "rewrites": [
     {
+      "source": "/dev/api/:path*",
+      "destination": "https://dev.back.plus82.co/api/:path*"
+    },
+    {
+      "source": "/api/:path*",
+      "destination": "https://back.plus82.co/api/:path*"
+    },
+    {
       "source": "/cdn/:path*",
       "destination": "https://d1zl1w0yhwh5x4.cloudfront.net/:path*"
     },

@@ -12,8 +12,13 @@ export default defineConfig({
   },
   server: {
     proxy: {
-      '/api': {
+      '/dev/api': {
         target: 'https://dev.back.plus82.co',
+        changeOrigin: true,
+        rewrite: path => path.replace(/^\/dev/, ''),
+      },
+      '/api': {
+        target: 'https://back.plus82.co',
         changeOrigin: true,
       },
       '/cdn': {
