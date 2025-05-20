@@ -6,8 +6,7 @@ import { Document, Page, pdfjs } from 'react-pdf'
 import { Spinner } from '@/shared/component/spinner'
 import { cn } from '@/shared/lib/util'
 
-pdfjs.GlobalWorkerOptions.workerSrc = `//unpkg.com/pdfjs-dist@${pdfjs.version}/build/pdf.worker.min.mjs`;
-
+pdfjs.GlobalWorkerOptions.workerSrc = `//unpkg.com/pdfjs-dist@${pdfjs.version}/build/pdf.worker.min.mjs`
 
 type Props = {
   className?: string
@@ -26,7 +25,7 @@ export const PDFViewer = ({ filePath, className, width = 800 }: Props) => {
     <div className={cn('flex h-full w-full flex-col', className)}>
       <div className="relative flex-1 overflow-auto">
         <Document
-          file={`http://localhost:3000/cdn/${filePath}`}
+          file={`/cdn/${filePath}`}
           onLoadSuccess={handleDocumentLoadSuccess}
           className="flex flex-col items-center"
           loading={<Spinner />}

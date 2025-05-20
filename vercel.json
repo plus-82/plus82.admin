@@ -1,9 +1,33 @@
 {
+  "headers": [
+    {
+      "source": "/api/(.*)",
+      "headers": [
+        {
+          "key": "Access-Control-Allow-Origin",
+          "value": "https://www.dev.admin.plus82.co"
+        },
+        {
+          "key": "Access-Control-Allow-Methods",
+          "value": "GET, POST, OPTIONS"
+        },
+        {
+          "key": "Access-Control-Allow-Headers",
+          "value": "Content-Type, Authorization"
+        },
+        { "key": "Access-Control-Allow-Credentials", "value": "true" }
+      ]
+    }
+  ],
   "rewrites": [
     {
       "source": "/api/:path*",
       "destination": "https://dev.back.plus82.co/api/:path*"
     },
-    { "source": "/(.*)", "destination": "/" }
+    {
+      "source": "/cdn/:path*",
+      "destination": "https://d1zl1w0yhwh5x4.cloudfront.net/:path*"
+    },
+    { "source": "/(.*)", "destination": "/index.html" }
   ]
 }
