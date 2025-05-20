@@ -276,7 +276,7 @@ class CustomAxios {
 }
 
 const baseURL =
-  import.meta.env.ENVIRONMENT === 'production'
+  import.meta.env.VITE_ENVIRONMENT === 'production'
     ? `${window.location.origin}/api/v1/`
     : `${window.location.origin}/dev/api/v1/`
 
