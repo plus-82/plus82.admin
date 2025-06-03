@@ -17,7 +17,7 @@ export const PersonalInformation = ({ jobPostResumeRelation }: Props) => {
         if (jobPostResumeRelation.profileImagePath) {
           return (
             <img
-              src={jobPostResumeRelation.profileImagePath}
+              src={`/cdn/${jobPostResumeRelation.profileImagePath}`}
               alt={jobPostResumeRelation.resumeTitle}
               className="h-[130px] w-[130px] rounded-full"
             />
