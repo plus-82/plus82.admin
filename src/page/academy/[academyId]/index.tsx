@@ -22,6 +22,7 @@ import { toast } from "react-toastify";
 import { academyApi } from "@/api/academy/request";
 import {CreateAcademySchema,type CreateAcademyInput,} from "@/type/academy";
 import { LocationTypes } from "@/type/code";
+import NavigationBar from "@/shared/component/NavigationBar";
 
 const EditAcademy = () => {
   const navigate = useNavigate();
@@ -132,180 +133,183 @@ const EditAcademy = () => {
   }
 
   return (
-    <Container maxWidth="md">
-      <Typography variant="h4" component="h1" gutterBottom>
-        학원 수정
-      </Typography>
-
-      <Box
-        component="form"
-        onSubmit={handleSubmit(onSubmit)}
-        sx={{ display: "flex", flexDirection: "column", gap: 2 }}
-      >
-        <TextField
-          label="학원명 (국문)"
-          {...register("name")}
-          error={!!errors.name}
-          helperText={errors.name?.message}
-        />
-        <TextField
-          label="학원명 (영문)"
-          {...register("nameEn")}
-          error={!!errors.nameEn}
-          helperText={errors.nameEn?.message}
-        />
-        <TextField
-          label="대표자명"
-          {...register("representativeName")}
-          error={!!errors.representativeName}
-          helperText={errors.representativeName?.message}
-        />
-        <TextField
-          label="대표자 이메일"
-          {...register("representativeEmail")}
-          error={!!errors.representativeEmail}
-          helperText={errors.representativeEmail?.message}
-        />
-        <TextField
-          label="설명"
-          multiline
-          rows={4}
-          {...register("description")}
-          error={!!errors.description}
-          helperText={errors.description?.message}
-        />
-        <FormControl fullWidth error={!!errors.locationType}>
-          <InputLabel id="locationType-label">지역</InputLabel>
-          <Select
-            labelId="locationType-label"
-            label="지역"
-            value={watch("locationType") || ""}
-            {...register("locationType")}
-          >
-            {LocationTypes.map((type) => (
-              <MenuItem key={type} value={type}>
-                {type}
-              </MenuItem>
-            ))}
-          </Select>
-        </FormControl>
-
-        <TextField
-          label="상세 주소"
-          {...register("detailedAddress")}
-          error={!!errors.detailedAddress}
-          helperText={errors.detailedAddress?.message}
-        />
-        <TextField
-          label="위도"
-          type="number"
-          inputProps={{ step: "any" }}
-          {...register("lat", {
-            valueAsNumber: true,
-            validate: (value) =>
-              !isNaN(value) || "유효한 숫자를 입력해주세요",
-          })}
-          error={!!errors.lat}
-          helperText={errors.lat?.message}
-        />
-        <TextField
-          label="경도"
-          type="number"
-          inputProps={{ step: "any" }}
-          {...register("lng", {
-            valueAsNumber: true,
-            validate: (value) =>
-              !isNaN(value) || "유효한 숫자를 입력해주세요",
-          })}
-          error={!!errors.lng}
-          helperText={errors.lng?.message}
-        />
-
-        <Box display="flex" flexDirection="column" gap={1}>
-          <FormControlLabel
-            control={<Checkbox 
-              {...register("forKindergarten")} 
-              checked={watch("forKindergarten")} 
-            />}
-            label="유아 대상"
-          />
-          <FormControlLabel
-            control={<Checkbox 
-              {...register("forElementary")} 
-              checked={watch("forElementary")}
-            />}
-            label="초등학생 대상"
-          />
-          <FormControlLabel
-            control={<Checkbox 
-              {...register("forMiddleSchool")} 
-              checked={watch("forMiddleSchool")}
-            />}
-            label="중학생 대상"
-          />
-          <FormControlLabel
-            control={<Checkbox 
-              {...register("forHighSchool")} 
-              checked={watch("forHighSchool")} 
-            />}
-            label="고등학생 대상"
-          />
-          <FormControlLabel
-            control={<Checkbox 
-              {...register("forAdult")} 
-              checked={watch("forAdult")}
-            />}
-            label="성인 대상"
-          />
-        </Box>
-
-        <Button variant="outlined" component="label">
-          이미지 업로드
-          <input
-            type="file"
-            hidden
-            multiple
-            accept="image/*"
-            onChange={handleImageChange}
-          />
-        </Button>
-        <Typography variant="body2">
-          선택한 파일 수: {imageFiles.length}
+    <>
+      <NavigationBar />
+      <Container maxWidth="md" sx={{ mt: 4 }}>
+        <Typography variant="h4" component="h1" gutterBottom>
+          학원 수정
         </Typography>
 
-        {/* 이미지 미리보기 */}
-        {imageFiles.length > 0 && (
-          <Box sx={{ display: 'flex', gap: 2, flexWrap: 'wrap' }}>
-            {imageFiles.map((item, index) => (
-              <Box key={index} sx={{ width: 150, border: "1px solid #ccc", overflow: "hidden" }}>
-                <img
-                  src={item.previewUrl}
-                  alt={`미리보기 ${index + 1}`}
-                  style={{ width: "100%", height: "100%", objectFit: "cover" }}
-                />
-              </Box>
-            ))}
-          </Box>
-        )}
+        <Box
+          component="form"
+          onSubmit={handleSubmit(onSubmit)}
+          sx={{ display: "flex", flexDirection: "column", gap: 2 }}
+        >
+          <TextField
+            label="학원명 (국문)"
+            {...register("name")}
+            error={!!errors.name}
+            helperText={errors.name?.message}
+          />
+          <TextField
+            label="학원명 (영문)"
+            {...register("nameEn")}
+            error={!!errors.nameEn}
+            helperText={errors.nameEn?.message}
+          />
+          <TextField
+            label="대표자명"
+            {...register("representativeName")}
+            error={!!errors.representativeName}
+            helperText={errors.representativeName?.message}
+          />
+          <TextField
+            label="대표자 이메일"
+            {...register("representativeEmail")}
+            error={!!errors.representativeEmail}
+            helperText={errors.representativeEmail?.message}
+          />
+          <TextField
+            label="설명"
+            multiline
+            rows={4}
+            {...register("description")}
+            error={!!errors.description}
+            helperText={errors.description?.message}
+          />
+          <FormControl fullWidth error={!!errors.locationType}>
+            <InputLabel id="locationType-label">지역</InputLabel>
+            <Select
+              labelId="locationType-label"
+              label="지역"
+              value={watch("locationType") || ""}
+              {...register("locationType")}
+            >
+              {LocationTypes.map((type) => (
+                <MenuItem key={type} value={type}>
+                  {type}
+                </MenuItem>
+              ))}
+            </Select>
+          </FormControl>
 
-        <Box display="flex" gap={2} mt={2}>
-          <Button variant="outlined" onClick={() => navigate("/academy")}>
-            취소
+          <TextField
+            label="상세 주소"
+            {...register("detailedAddress")}
+            error={!!errors.detailedAddress}
+            helperText={errors.detailedAddress?.message}
+          />
+          <TextField
+            label="위도"
+            type="number"
+            inputProps={{ step: "any" }}
+            {...register("lat", {
+              valueAsNumber: true,
+              validate: (value) =>
+                !isNaN(value) || "유효한 숫자를 입력해주세요",
+            })}
+            error={!!errors.lat}
+            helperText={errors.lat?.message}
+          />
+          <TextField
+            label="경도"
+            type="number"
+            inputProps={{ step: "any" }}
+            {...register("lng", {
+              valueAsNumber: true,
+              validate: (value) =>
+                !isNaN(value) || "유효한 숫자를 입력해주세요",
+            })}
+            error={!!errors.lng}
+            helperText={errors.lng?.message}
+          />
+
+          <Box display="flex" flexDirection="column" gap={1}>
+            <FormControlLabel
+              control={<Checkbox 
+                {...register("forKindergarten")} 
+                checked={watch("forKindergarten")} 
+              />}
+              label="유아 대상"
+            />
+            <FormControlLabel
+              control={<Checkbox 
+                {...register("forElementary")} 
+                checked={watch("forElementary")}
+              />}
+              label="초등학생 대상"
+            />
+            <FormControlLabel
+              control={<Checkbox 
+                {...register("forMiddleSchool")} 
+                checked={watch("forMiddleSchool")}
+              />}
+              label="중학생 대상"
+            />
+            <FormControlLabel
+              control={<Checkbox 
+                {...register("forHighSchool")} 
+                checked={watch("forHighSchool")} 
+              />}
+              label="고등학생 대상"
+            />
+            <FormControlLabel
+              control={<Checkbox 
+                {...register("forAdult")} 
+                checked={watch("forAdult")}
+              />}
+              label="성인 대상"
+            />
+          </Box>
+
+          <Button variant="outlined" component="label">
+            이미지 업로드
+            <input
+              type="file"
+              hidden
+              multiple
+              accept="image/*"
+              onChange={handleImageChange}
+            />
           </Button>
-          <Button
-            type="submit"
-            variant="contained"
-            disabled={updateAcademy.isPending}
-          >
-            {updateAcademy.isPending ? (
-              <CircularProgress size={24} />
-            ) : (
-              "수정"
-            )}
-          </Button>
+          <Typography variant="body2">
+            선택한 파일 수: {imageFiles.length}
+          </Typography>
+
+          {/* 이미지 미리보기 */}
+          {imageFiles.length > 0 && (
+            <Box sx={{ display: 'flex', gap: 2, flexWrap: 'wrap' }}>
+              {imageFiles.map((item, index) => (
+                <Box key={index} sx={{ width: 150, border: "1px solid #ccc", overflow: "hidden" }}>
+                  <img
+                    src={item.previewUrl}
+                    alt={`미리보기 ${index + 1}`}
+                    style={{ width: "100%", height: "100%", objectFit: "cover" }}
+                  />
+                </Box>
+              ))}
+            </Box>
+          )}
+
+          <Box display="flex" gap={2} mt={2}>
+            <Button variant="outlined" onClick={() => navigate("/academy")}>
+              취소
+            </Button>
+            <Button
+              type="submit"
+              variant="contained"
+              disabled={updateAcademy.isPending}
+            >
+              {updateAcademy.isPending ? (
+                <CircularProgress size={24} />
+              ) : (
+                "수정"
+              )}
+            </Button>
+          </Box>
         </Box>
-      </Box>
-    </Container>
+      </Container>
+    </>
   );
 };
 
