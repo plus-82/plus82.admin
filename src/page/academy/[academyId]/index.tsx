@@ -50,6 +50,7 @@ const EditAcademy = () => {
       representativeEmail: "",
       description: "",
       locationType: "SEOUL",
+      address: "",
       detailedAddress: "",
       lat: 0,
       lng: 0,
@@ -70,6 +71,7 @@ const EditAcademy = () => {
       setValue("representativeEmail", academy.representativeEmail);
       setValue("description", academy.description || "");
       setValue("locationType", academy.locationType);
+      setValue("address", academy.address);
       setValue("detailedAddress", academy.detailedAddress);
       setValue("lat", academy.lat ?? 0);
       setValue("lng", academy.lng ?? 0);
@@ -194,10 +196,14 @@ const EditAcademy = () => {
           </FormControl>
 
           <TextField
+            label="주소"
+            {...register("address")}
+            error={!!errors.address}
+            helperText={errors.address?.message}
+          />
+          <TextField
             label="상세 주소"
             {...register("detailedAddress")}
-            error={!!errors.detailedAddress}
-            helperText={errors.detailedAddress?.message}
           />
           <TextField
             label="위도"

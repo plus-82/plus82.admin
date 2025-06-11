@@ -34,7 +34,8 @@ export const academyApi = {
     formData.append("representativeEmail", data.representativeEmail);
     formData.append("description", data.description ?? "");
     formData.append("locationType", data.locationType);
-    formData.append("detailedAddress", data.detailedAddress);
+    formData.append("address", data.address);
+    formData.append("detailedAddress", data.detailedAddress ?? "");
     formData.append("lat", data.lat.toString());
     formData.append("lng", data.lng.toString());
     formData.append("forKindergarten", String(data.forKindergarten));
@@ -69,7 +70,8 @@ export const academyApi = {
     formData.append("representativeEmail", data.representativeEmail);
     formData.append("description", data.description ?? "");
     formData.append("locationType", data.locationType);
-    formData.append("detailedAddress", data.detailedAddress);
+    formData.append("address", data.address);
+    formData.append("detailedAddress", data.detailedAddress ?? "");
     formData.append("lat", data.lat.toString());
     formData.append("lng", data.lng.toString());
     formData.append("forKindergarten", String(data.forKindergarten));

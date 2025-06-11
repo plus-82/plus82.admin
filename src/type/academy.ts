@@ -12,7 +12,8 @@ export const AcademySchema = z.object({
   description: z.string().nullable().optional(), // 상세 조회에서만 사용
   businessRegistrationNumber: z.string(),
   locationType: z.enum(LocationTypes),
-  detailedAddress: z.string(),
+  address: z.string(),
+  detailedAddress: z.string().optional(),
   byAdmin: z.boolean().optional(), // 목록 조회에서만 사용
   lat: z.number().optional(), // 상세 조회에서만 사용
   lng: z.number().optional(), // 상세 조회에서만 사용
@@ -34,6 +35,7 @@ export const AcademyListItemSchema = AcademySchema.pick({
   representativeEmail: true,
   businessRegistrationNumber: true,
   locationType: true,
+  address: true,
   detailedAddress: true,
   updatedAt: true,
   byAdmin: true,
@@ -49,13 +51,13 @@ export const AcademyDetailSchema = AcademySchema.pick({
   description: true,
   businessRegistrationNumber: true,
   locationType: true,
+  address: true,
   detailedAddress: true,
   lat: true,
   lng: true,
   forKindergarten: true,
   forElementary: true,
   forMiddleSchool: true,
-  forHighSchool: true,
   forAdult: true,
   imageUrls: true,
 });
@@ -67,7 +69,8 @@ export const CreateAcademySchema = z.object({
   representativeEmail: z.string().email("이메일 형식이 아닙니다").min(1, "대표 메일을 입력해주세요"),
   description: z.string().optional(),
   locationType: AcademySchema.shape.locationType,
-  detailedAddress: z.string().min(1, "상세 주소를 입력해주세요"),
+  address: z.string().min(1, "주소를 입력해주세요"),
+  detailedAddress: z.string().optional(),
   lat: z.number(),
   lng: z.number(),
   forKindergarten: z.boolean(),
