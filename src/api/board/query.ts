@@ -14,7 +14,6 @@ export const boardQueries = {
     queryOptions({
       queryKey: [...boardQueries.details(id), id],
       queryFn: () => {
-        console.log(id)
         return boardApi.getPost(id)
       },
     }),

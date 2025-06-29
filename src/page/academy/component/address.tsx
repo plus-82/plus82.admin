@@ -27,13 +27,8 @@ export const Address = () => {
     register,
     formState: { errors },
     setValue,
-    getValues,
     control,
   } = useFormContext<CreateAcademyInput>()
-
-  console.log(
-    getValues(['address', 'detailedAddress', 'locationType', 'lat', 'lng']),
-  )
 
   const { geocode } = useGeocoding()
 

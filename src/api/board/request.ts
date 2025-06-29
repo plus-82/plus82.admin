@@ -35,7 +35,6 @@ export const boardApi = {
   // 게시글 상세 조회
   getPost: async (id: number): Promise<Post> => {
     try {
-      console.log(id)
       return await http.get<Post>({
         url: BOARD_API.POST(id),
       });

@@ -71,7 +71,6 @@ const NewAcademy = () => {
   })
 
   const onSubmit = (data: CreateAcademyInput) => {
-    console.log(data)
     if (selectedFiles.length === 0) {
       toast.error('최소 1장의 이미지를 추가해주세요.')
       return

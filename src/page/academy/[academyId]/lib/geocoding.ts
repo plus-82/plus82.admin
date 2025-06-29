@@ -60,11 +60,8 @@ export const useGeocoding = () => {
   ) => {
     if (!geocoder.current) return null
 
-    console.log(geocoder.current)
-
     await geocoder.current.geocode({ address }, (results, status) => {
       if (status === 'OK' && results?.[0]) {
-        console.log(results[0])
         const { location } = results[0].geometry
 
         callback({
