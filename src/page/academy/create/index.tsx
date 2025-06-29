@@ -6,24 +6,22 @@ import {
   Button,
   Box,
   CircularProgress,
-  MenuItem,
-  Select,
-  InputLabel,
-  FormControl,
   Checkbox,
   FormControlLabel,
   Avatar,
 } from '@mui/material'
 import { useMutation } from '@tanstack/react-query'
 import { useState } from 'react'
-import { useForm } from 'react-hook-form'
+import { FormProvider, useForm } from 'react-hook-form'
 import { useNavigate } from 'react-router-dom'
 import { toast } from 'react-toastify'
 
 import { academyApi } from '@/api/academy/request'
-import { CreateAcademySchema, type CreateAcademyInput } from '@/type/academy'
-import { LocationTypes } from '@/type/code'
 import NavigationBar from '@/shared/component/NavigationBar'
+import { CreateAcademySchema, type CreateAcademyInput } from '@/type/academy'
+import { Location } from '@/type/code'
+
+import { Address } from '../component/address'
 
 const defaultValues: CreateAcademyInput = {
   name: '',
@@ -31,7 +29,7 @@ const defaultValues: CreateAcademyInput = {
   representativeName: '',
   representativeEmail: '',
   description: '',
-  locationType: 'SEOUL',
+  locationType: Location.SEOUL,
   address: '',
   detailedAddress: '',
   lat: 0.0,
@@ -49,14 +47,18 @@ const NewAcademy = () => {
   const [selectedFiles, setSelectedFiles] = useState<File[]>([])
   const [previewImages, setPreviewImages] = useState<string[]>([])
 
+  const form = useForm<CreateAcademyInput>({
+    resolver: zodResolver(CreateAcademySchema),
+    defaultValues,
+    mode: 'onSubmit',
+    reValidateMode: 'onSubmit',
+  })
+
   const {
     register,
     handleSubmit,
     formState: { errors },
-  } = useForm<CreateAcademyInput>({
-    resolver: zodResolver(CreateAcademySchema),
-    defaultValues,
-  })
+  } = form
 
   const createAcademy = useMutation({
     mutationFn: academyApi.createAcademy,
@@ -92,7 +94,7 @@ const NewAcademy = () => {
   }
 
   return (
-    <>
+    <FormProvider {...form}>
       <NavigationBar />
       <Container maxWidth="md" sx={{ mt: 4 }}>
         <Typography variant="h4" component="h1" gutterBottom>
@@ -136,51 +138,8 @@ const NewAcademy = () => {
             error={!!errors.description}
             helperText={errors.description?.message}
           />
-          <FormControl fullWidth error={!!errors.locationType}>
-            <InputLabel id="locationType-label">지역</InputLabel>
-            <Select
-              labelId="locationType-label"
-              label="지역"
-              defaultValue={defaultValues.locationType}
-              {...register('locationType')}
-            >
-              {LocationTypes.map(type => (
-                <MenuItem key={type} value={type}>
-                  {type}
-                </MenuItem>
-              ))}
-            </Select>
-          </FormControl>
 
-          <TextField
-            label="주소"
-            {...register('address')}
-            error={!!errors.address}
-            helperText={errors.address?.message}
-          />
-          <TextField label="상세 주소" {...register('detailedAddress')} />
-          <TextField
-            label="위도"
-            type="number"
-            inputProps={{ step: 'any' }} // 소수점 입력 허용
-            {...register('lat', {
-              valueAsNumber: true,
-              validate: value => !isNaN(value) || '유효한 숫자를 입력해주세요', // 숫자인지 검증
-            })}
-            error={!!errors.lat}
-            helperText={errors.lat?.message}
-          />
-          <TextField
-            label="경도"
-            type="number"
-            inputProps={{ step: 'any' }} // 소수점 입력 허용
-            {...register('lng', {
-              valueAsNumber: true,
-              validate: value => !isNaN(value) || '유효한 숫자를 입력해주세요', // 숫자인지 검증
-            })}
-            error={!!errors.lng}
-            helperText={errors.lng?.message}
-          />
+          <Address />
 
           <Box display="flex" flexDirection="column" gap={1}>
             <FormControlLabel
@@ -252,7 +211,7 @@ const NewAcademy = () => {
           </Box>
         </Box>
       </Container>
-    </>
+    </FormProvider>
   )
 }
 

@@ -6,23 +6,21 @@ import {
   Button,
   Box,
   CircularProgress,
-  MenuItem,
-  Select,
-  InputLabel,
-  FormControl,
   Checkbox,
   FormControlLabel,
 } from '@mui/material'
 import { useQuery, useMutation } from '@tanstack/react-query'
 import { useEffect, useState } from 'react'
-import { useForm } from 'react-hook-form'
+import { FormProvider, useForm } from 'react-hook-form'
 import { useNavigate, useParams } from 'react-router-dom'
 import { toast } from 'react-toastify'
 
 import { academyApi } from '@/api/academy/request'
-import { CreateAcademySchema, type CreateAcademyInput } from '@/type/academy'
-import { LocationTypes } from '@/type/code'
 import NavigationBar from '@/shared/component/NavigationBar'
+import { CreateAcademySchema, type CreateAcademyInput } from '@/type/academy'
+import { Location } from '@/type/code'
+
+import { Address } from '../component/address'
 
 const EditAcademy = () => {
   const navigate = useNavigate()
@@ -41,13 +39,7 @@ const EditAcademy = () => {
     enabled: !!academyId,
   })
 
-  const {
-    register,
-    handleSubmit,
-    formState: { errors },
-    watch,
-    setValue,
-  } = useForm<CreateAcademyInput>({
+  const form = useForm<CreateAcademyInput>({
     resolver: zodResolver(CreateAcademySchema),
     defaultValues: {
       name: '',
@@ -55,7 +47,7 @@ const EditAcademy = () => {
       representativeName: '',
       representativeEmail: '',
       description: '',
-      locationType: 'SEOUL',
+      locationType: Location.SEOUL,
       address: '',
       detailedAddress: '',
       lat: 0,
@@ -66,7 +58,17 @@ const EditAcademy = () => {
       forHighSchool: false,
       forAdult: false,
     },
+    mode: 'onSubmit',
+    reValidateMode: 'onSubmit',
   })
+
+  const {
+    register,
+    handleSubmit,
+    formState: { errors },
+    watch,
+    setValue,
+  } = form
 
   // academy 데이터가 로드되면 폼 값 설정
   useEffect(() => {
@@ -77,8 +79,8 @@ const EditAcademy = () => {
       setValue('representativeEmail', academy.representativeEmail)
       setValue('description', academy.description || '')
       setValue('locationType', academy.locationType)
-      setValue('address', academy.address)
-      setValue('detailedAddress', academy.detailedAddress)
+      setValue('address', academy.address || '')
+      setValue('detailedAddress', academy.detailedAddress || '')
       setValue('lat', academy.lat ?? 0)
       setValue('lng', academy.lng ?? 0)
       setValue('forKindergarten', academy.forKindergarten ?? false)
@@ -162,7 +164,7 @@ const EditAcademy = () => {
   }
 
   return (
-    <>
+    <FormProvider {...form}>
       <NavigationBar />
       <Container maxWidth="md" sx={{ mt: 4 }}>
         <Typography variant="h4" component="h1" gutterBottom>
@@ -206,51 +208,8 @@ const EditAcademy = () => {
             error={!!errors.description}
             helperText={errors.description?.message}
           />
-          <FormControl fullWidth error={!!errors.locationType}>
-            <InputLabel id="locationType-label">지역</InputLabel>
-            <Select
-              labelId="locationType-label"
-              label="지역"
-              value={watch('locationType') || ''}
-              {...register('locationType')}
-            >
-              {LocationTypes.map(type => (
-                <MenuItem key={type} value={type}>
-                  {type}
-                </MenuItem>
-              ))}
-            </Select>
-          </FormControl>
 
-          <TextField
-            label="주소"
-            {...register('address')}
-            error={!!errors.address}
-            helperText={errors.address?.message}
-          />
-          <TextField label="상세 주소" {...register('detailedAddress')} />
-          <TextField
-            label="위도"
-            type="number"
-            inputProps={{ step: 'any' }}
-            {...register('lat', {
-              valueAsNumber: true,
-              validate: value => !isNaN(value) || '유효한 숫자를 입력해주세요',
-            })}
-            error={!!errors.lat}
-            helperText={errors.lat?.message}
-          />
-          <TextField
-            label="경도"
-            type="number"
-            inputProps={{ step: 'any' }}
-            {...register('lng', {
-              valueAsNumber: true,
-              validate: value => !isNaN(value) || '유효한 숫자를 입력해주세요',
-            })}
-            error={!!errors.lng}
-            helperText={errors.lng?.message}
-          />
+          <Address />
 
           <Box display="flex" flexDirection="column" gap={1}>
             <FormControlLabel
@@ -378,7 +337,7 @@ const EditAcademy = () => {
           </Box>
         </Box>
       </Container>
-    </>
+    </FormProvider>
   )
 }
 

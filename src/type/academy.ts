@@ -1,6 +1,6 @@
 import { z } from 'zod'
 
-import { LocationTypes } from './code'
+import { Location } from './code'
 
 // 이미지 VO 스키마
 export const ImageVOSchema = z.object({
@@ -16,7 +16,7 @@ export const AcademyListItemSchema = z.object({
   representativeName: z.string(),
   representativeEmail: z.string().email(),
   businessRegistrationNumber: z.string(),
-  locationType: z.enum(LocationTypes),
+  locationType: z.nativeEnum(Location),
   address: z.string(),
   detailedAddress: z.string().optional(),
   updatedAt: z.string().datetime(),
@@ -32,7 +32,7 @@ export const AcademyDetailSchema = z.object({
   representativeEmail: z.string().email(),
   description: z.string().nullable(),
   businessRegistrationNumber: z.string(),
-  locationType: z.enum(LocationTypes),
+  locationType: z.nativeEnum(Location),
   address: z.string(),
   detailedAddress: z.string().optional(),
   lat: z.number(),
@@ -54,7 +54,7 @@ export const CreateAcademySchema = z.object({
     .email('이메일 형식이 아닙니다')
     .min(1, '대표 메일을 입력해주세요'),
   description: z.string().optional(),
-  locationType: z.enum(LocationTypes),
+  locationType: z.nativeEnum(Location),
   address: z.string().min(1, '주소를 입력해주세요'),
   detailedAddress: z.string().optional(),
   lat: z.number(),
