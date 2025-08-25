@@ -1,57 +1,55 @@
-import MenuIcon from '@mui/icons-material/Menu';
-import { 
-  AppBar, 
-  Toolbar, 
-  Typography, 
-  Button, 
-  Box, 
+import MenuIcon from '@mui/icons-material/Menu'
+import {
+  AppBar,
+  Toolbar,
+  Typography,
+  Button,
+  Box,
   Container,
   IconButton,
   Menu,
-  MenuItem
-} from '@mui/material';
-import React, { MouseEvent } from 'react';
-import { useNavigate, useLocation } from 'react-router-dom';
-import { toast } from "react-toastify";
-import { removeCookie } from "typescript-cookie";
+  MenuItem,
+} from '@mui/material'
+import React, { MouseEvent } from 'react'
+import { useNavigate, useLocation } from 'react-router-dom'
+import { toast } from 'react-toastify'
+import { removeCookie } from 'typescript-cookie'
 
 // 페이지 타입 정의
 interface Page {
-  name: string;
-  path: string;
+  name: string
+  path: string
 }
 
 const NavigationBar = () => {
-  const navigate = useNavigate();
-  const location = useLocation();
-  const [anchorElNav, setAnchorElNav] = React.useState<HTMLElement | null>(null);
+  const navigate = useNavigate()
+  const location = useLocation()
+  const [anchorElNav, setAnchorElNav] = React.useState<HTMLElement | null>(null)
 
   const handleOpenNavMenu = (event: MouseEvent<HTMLElement>) => {
-    setAnchorElNav(event.currentTarget);
-  };
+    setAnchorElNav(event.currentTarget)
+  }
 
   const handleCloseNavMenu = () => {
-    setAnchorElNav(null);
-  };
+    setAnchorElNav(null)
+  }
 
   const pages: Page[] = [
     { name: '학원 관리', path: '/academy' },
     { name: '채용공고', path: '/job-post' },
     { name: '지원자 관리', path: '/resume' },
-    { name: '테스트', path: '/board' },
-  ];
+  ]
 
   const handleNavigation = (path: string) => {
-    navigate(path);
-    handleCloseNavMenu();
-  };
+    navigate(path)
+    handleCloseNavMenu()
+  }
 
   const onLogout = () => {
-    removeCookie("Authorization");
-    navigate("/");
-    toast.success("로그아웃 되었습니다");
-  };
-
+    removeCookie('Authorization')
+    navigate('/')
+    toast.success('로그아웃 되었습니다')
+  }
 
   return (
     <AppBar position="static">
@@ -62,7 +60,11 @@ const NavigationBar = () => {
             variant="h6"
             noWrap
             component="div"
-            sx={{ mr: 2, display: { xs: 'none', md: 'flex' }, cursor: 'pointer' }}
+            sx={{
+              mr: 2,
+              display: { xs: 'none', md: 'flex' },
+              cursor: 'pointer',
+            }}
             // onClick={() => navigate('/')}
             onClick={() => handleNavigation(pages[0].path)}
           >
@@ -98,9 +100,9 @@ const NavigationBar = () => {
                 display: { xs: 'block', md: 'none' },
               }}
             >
-              {pages.map((page) => (
-                <MenuItem 
-                  key={page.name} 
+              {pages.map(page => (
+                <MenuItem
+                  key={page.name}
                   onClick={() => handleNavigation(page.path)}
                   selected={location.pathname === page.path}
                 >
@@ -115,7 +117,11 @@ const NavigationBar = () => {
             variant="h6"
             noWrap
             component="div"
-            sx={{ flexGrow: 1, display: { xs: 'flex', md: 'none' }, cursor: 'pointer' }}
+            sx={{
+              flexGrow: 1,
+              display: { xs: 'flex', md: 'none' },
+              cursor: 'pointer',
+            }}
             onClick={() => navigate('/')}
           >
             Plus82
@@ -123,15 +129,18 @@ const NavigationBar = () => {
 
           {/* 데스크톱 메뉴 */}
           <Box sx={{ flexGrow: 1, display: { xs: 'none', md: 'flex' } }}>
-            {pages.map((page) => (
+            {pages.map(page => (
               <Button
                 key={page.name}
                 onClick={() => handleNavigation(page.path)}
-                sx={{ 
-                  my: 2, 
-                  color: 'white', 
+                sx={{
+                  my: 2,
+                  color: 'white',
                   display: 'block',
-                  backgroundColor: location.pathname === page.path ? 'rgba(255, 255, 255, 0.15)' : 'transparent'
+                  backgroundColor:
+                    location.pathname === page.path
+                      ? 'rgba(255, 255, 255, 0.15)'
+                      : 'transparent',
                 }}
               >
                 {page.name}
@@ -141,12 +150,14 @@ const NavigationBar = () => {
 
           {/* 로그인/로그아웃 버튼 */}
           <Box sx={{ flexGrow: 0 }}>
-            <Button color="inherit" onClick={onLogout}>로그아웃</Button>
+            <Button color="inherit" onClick={onLogout}>
+              로그아웃
+            </Button>
           </Box>
         </Toolbar>
       </Container>
     </AppBar>
-  );
-};
+  )
+}
 
-export default NavigationBar;
+export default NavigationBar
