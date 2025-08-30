@@ -14,6 +14,14 @@ export const teacherApi = {
   getResumeList: async (
     page: number,
     size: number,
+    filters?: {
+      genderType?: 'MALE' | 'FEMALE'
+      countryId?: number
+      fromBirthDate?: string
+      toBirthDate?: string
+      hasVisa?: boolean
+      visaType?: 'E7' | 'E2' | 'OTHERS'
+    },
   ): Promise<{
     content: TeacherResume[]
     pageable: {
@@ -30,9 +38,10 @@ export const teacherApi = {
     numberOfElements: number
     empty: boolean
   }> => {
+    const params = { page, size, ...filters }
     return await http.getPaged<TeacherResume>({
       url: TEACHER_API.RESUME,
-      data: { page, size },
+      data: params,
       useAuth: true,
     })
   },
