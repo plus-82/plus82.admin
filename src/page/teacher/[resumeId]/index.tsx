@@ -4,7 +4,6 @@ import { useParams } from 'react-router-dom'
 
 import { teacherQueries } from '@/api/teacher/query'
 import NavigationBar from '@/shared/component/NavigationBar'
-import { Resume } from '@/type/resume'
 
 const TeacherResumeDetailPage = () => {
   const { resumeId } = useParams()
@@ -152,27 +151,47 @@ const TeacherResumeDetailPage = () => {
             </h3>
             <div className="grid grid-cols-2 gap-4 md:grid-cols-5">
               <div
-                className={`rounded-lg p-3 text-center ${data.forKindergarten ? 'bg-blue-100 text-blue-800' : 'bg-gray-100 text-gray-500'}`}
+                className={`rounded-lg p-3 text-center ${
+                  data.forKindergarten
+                    ? 'bg-blue-100 text-blue-800'
+                    : 'bg-gray-100 text-gray-500 line-through'
+                }`}
               >
                 유치원
               </div>
               <div
-                className={`rounded-lg p-3 text-center ${data.forElementary ? 'bg-blue-100 text-blue-800' : 'bg-gray-100 text-gray-500'}`}
+                className={`rounded-lg p-3 text-center ${
+                  data.forElementary
+                    ? 'bg-blue-100 text-blue-800'
+                    : 'bg-gray-100 text-gray-500 line-through'
+                }`}
               >
                 초등학교
               </div>
               <div
-                className={`rounded-lg p-3 text-center ${data.forMiddleSchool ? 'bg-blue-100 text-blue-800' : 'bg-gray-100 text-gray-500'}`}
+                className={`rounded-lg p-3 text-center ${
+                  data.forMiddleSchool
+                    ? 'bg-blue-100 text-blue-800'
+                    : 'bg-gray-100 text-gray-500 line-through'
+                }`}
               >
                 중학교
               </div>
               <div
-                className={`rounded-lg p-3 text-center ${data.forHighSchool ? 'bg-blue-100 text-blue-800' : 'bg-gray-100 text-gray-500'}`}
+                className={`rounded-lg p-3 text-center ${
+                  data.forHighSchool
+                    ? 'bg-blue-100 text-blue-800'
+                    : 'bg-gray-100 text-gray-500 line-through'
+                }`}
               >
                 고등학교
               </div>
               <div
-                className={`rounded-lg p-3 text-center ${data.forAdult ? 'bg-blue-100 text-blue-800' : 'bg-gray-100 text-gray-500'}`}
+                className={`rounded-lg p-3 text-center ${
+                  data.forAdult
+                    ? 'bg-blue-100 text-blue-800'
+                    : 'bg-gray-100 text-gray-500 line-through'
+                }`}
               >
                 성인
               </div>
