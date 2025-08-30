@@ -4,6 +4,7 @@ import { useParams } from 'react-router-dom'
 
 import { teacherQueries } from '@/api/teacher/query'
 import NavigationBar from '@/shared/component/NavigationBar'
+import { Icon } from '@/shared/component/icon'
 
 const TeacherResumeDetailPage = () => {
   const { resumeId } = useParams()
@@ -54,14 +55,36 @@ const TeacherResumeDetailPage = () => {
         <div className="rounded-lg bg-white p-6 shadow-lg">
           {/* 헤더 */}
           <div className="mb-6 border-b border-gray-200 pb-6">
-            <h1 className="mb-2 text-3xl font-bold text-gray-900">
-              {data.firstName && data.lastName
-                ? `${data.lastName}${data.firstName}님의 이력서`
-                : '이력서'}
-            </h1>
-            <p className="text-gray-600">
-              최종 수정일: {new Date(data.updatedAt).toLocaleDateString()}
-            </p>
+            <div className="flex items-center justify-between">
+              <div>
+                <h1 className="mb-2 text-3xl font-bold text-gray-900">
+                  {data.firstName && data.lastName
+                    ? `${data.lastName}${data.firstName}님의 이력서`
+                    : '이력서'}
+                </h1>
+                <p className="text-gray-600">
+                  최종 수정일: {new Date(data.updatedAt).toLocaleDateString()}
+                </p>
+              </div>
+              <div>
+                {data.profileImagePath ? (
+                  <img
+                    src={`/cdn/${data.profileImagePath}`}
+                    alt="프로필 이미지"
+                    className="h-32 w-32 rounded-full object-cover"
+                  />
+                ) : (
+                  <div className="flex h-32 w-32 items-center justify-center rounded-full bg-gray-200">
+                    <Icon
+                      name="User"
+                      size="custom"
+                      className="h-20 w-20"
+                      color="#424242"
+                    />
+                  </div>
+                )}
+              </div>
+            </div>
           </div>
 
           {/* 기본 정보 */}
