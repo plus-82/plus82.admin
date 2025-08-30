@@ -1,6 +1,7 @@
 import http from '../instance'
 
 import type { TeacherResume } from '../../type/teacher'
+import type { Resume } from '../../type/resume'
 
 // API 엔드포인트
 const TEACHER_API = {
@@ -32,6 +33,14 @@ export const teacherApi = {
     return await http.getPaged<TeacherResume>({
       url: TEACHER_API.RESUME,
       data: { page, size },
+      useAuth: true,
+    })
+  },
+
+  // 이력서 상세 조회
+  getResumeDetail: async (resumeId: number): Promise<Resume> => {
+    return await http.get<Resume>({
+      url: `${TEACHER_API.RESUME}/${resumeId}`,
       useAuth: true,
     })
   },

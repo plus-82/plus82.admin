@@ -6,4 +6,10 @@ export const teacherQueries = {
     queryKey: ['teacherResumeList', page, size],
     queryFn: () => teacherApi.getResumeList(page, size),
   }),
+
+  // 이력서 상세 조회
+  detail: (resumeId: number) => ({
+    queryKey: ['teacherResumeDetail', resumeId],
+    queryFn: () => teacherApi.getResumeDetail(resumeId),
+  }),
 }

@@ -37,7 +37,7 @@ const ResumeList = () => {
   }
 
   const handleRowClick = (resumeId: number) => {
-    navigate(`/resume/${resumeId}`)
+    navigate(`/teacher/${resumeId}`)
   }
 
   if (isLoading) {
