@@ -24,6 +24,7 @@ import { useState } from 'react'
 import { useNavigate } from 'react-router-dom'
 
 import { teacherQueries } from '@/api/teacher/query'
+import { countryQueries } from '@/api/country/query'
 import NavigationBar from '@/shared/component/NavigationBar'
 import { TeacherResume } from '@/type/teacher'
 
@@ -45,6 +46,12 @@ const ResumeList = () => {
   const { data, isLoading, error } = useQuery(
     teacherQueries.list(page - 1, size, filters),
   )
+
+  const {
+    data: countries,
+    isLoading: countriesLoading,
+    error: countriesError,
+  } = useQuery(countryQueries.list())
 
   const handlePageChange = (
     _event: React.ChangeEvent<unknown>,
@@ -145,19 +152,36 @@ const ResumeList = () => {
               </FormControl>
             </Grid>
             <Grid item xs={12} sm={6} md={2}>
-              <TextField
-                fullWidth
-                size="small"
-                label="국적 ID"
-                type="number"
-                value={filters.countryId || ''}
-                onChange={e =>
-                  handleFilterChange(
-                    'countryId',
-                    e.target.value ? Number(e.target.value) : '',
-                  )
-                }
-              />
+              <FormControl fullWidth size="small">
+                <InputLabel>국가</InputLabel>
+                <Select
+                  value={filters.countryId || ''}
+                  label="국가"
+                  disabled={countriesLoading}
+                  onChange={e =>
+                    handleFilterChange(
+                      'countryId',
+                      e.target.value ? Number(e.target.value) : '',
+                    )
+                  }
+                >
+                  <MenuItem value="">전체</MenuItem>
+                  {countriesLoading ? (
+                    <MenuItem disabled>로딩 중...</MenuItem>
+                  ) : countriesError ? (
+                    <MenuItem disabled>국가 목록을 불러올 수 없습니다</MenuItem>
+                  ) : countries && countries.length > 0 ? (
+                    countries.map(country => (
+                      <MenuItem key={country.id} value={country.id}>
+                        <span className="mr-2">{country.flag}</span>
+                        {country.countryNameEn}
+                      </MenuItem>
+                    ))
+                  ) : (
+                    <MenuItem disabled>국가 목록이 없습니다</MenuItem>
+                  )}
+                </Select>
+              </FormControl>
             </Grid>
             <Grid item xs={12} sm={6} md={2}>
               <TextField
