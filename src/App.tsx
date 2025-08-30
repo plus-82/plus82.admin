@@ -9,6 +9,7 @@ import JobPostDetail from './page/job-post/[id]'
 import CreateJobPost from './page/job-post/create'
 import ResumeList from './page/resume'
 import ResumeDetail from './page/resume/[id]'
+import TeacherResumeList from './page/teacher'
 
 import '@fontsource/roboto/300.css'
 import '@fontsource/roboto/400.css'
@@ -28,6 +29,7 @@ const App = () => {
         <Route path="/job-post/:jobPostId" element={<JobPostDetail />} />
         <Route path="/resume" element={<ResumeList />} />
         <Route path="/resume/:resumeId" element={<ResumeDetail />} />
+        <Route path="/teacher" element={<TeacherResumeList />} />
       </Routes>
     </BrowserRouter>
   )

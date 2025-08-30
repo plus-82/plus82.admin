@@ -38,6 +38,7 @@ const NavigationBar = () => {
     { name: '학원 관리', path: '/academy' },
     { name: '채용공고', path: '/job-post' },
     { name: '지원자 관리', path: '/resume' },
+    { name: '이력서 둘러보기', path: '/teacher' },
   ]
 
   const handleNavigation = (path: string) => {
