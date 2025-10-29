@@ -7,11 +7,11 @@ export const teacherQueries = {
     size: number,
     filters?: {
       genderType?: 'MALE' | 'FEMALE'
-      countryId?: number
+      countryIdList?: number
       fromBirthDate?: string
       toBirthDate?: string
       hasVisa?: boolean
-      visaType?: 'E7' | 'E2' | 'OTHERS'
+      visaTypeList?: 'E7' | 'E2' | 'OTHERS'
     },
   ) => ({
     queryKey: ['teacherResumeList', page, size, filters],
