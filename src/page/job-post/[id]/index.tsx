@@ -19,7 +19,6 @@ import { jobPostApi } from '@/api/job-post/request'
 import { CreateJobPostSchema, type CreateJobPostInput } from '@/type/jobpost'
 import { toast } from 'react-toastify'
 import NavigationBar from '@/shared/component/NavigationBar'
-import { formatCurrency } from '@/shared/lib/format'
 
 const JobPostDetail = () => {
   const navigate = useNavigate()
@@ -183,10 +182,10 @@ const JobPostDetail = () => {
 
           <Box display="flex" gap={2}>
             <TextField
-              label="월급"
+              label="월급 (만원)"
               type="text"
               fullWidth
-              value={salaryValue ? formatCurrency(salaryValue) : ''}
+              value={salaryValue ? salaryValue.toLocaleString('ko-KR') : ''}
               onChange={e => {
                 const numericValue = e.target.value.replace(/[^\d]/g, '')
                 if (numericValue) {

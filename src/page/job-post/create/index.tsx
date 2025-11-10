@@ -1,4 +1,4 @@
-import { zodResolver } from "@hookform/resolvers/zod";
+import { zodResolver } from '@hookform/resolvers/zod'
 import {
   Container,
   Typography,
@@ -13,73 +13,80 @@ import {
   Checkbox,
   FormControlLabel,
   FormGroup,
-} from "@mui/material";
-import { useMutation, useQuery } from "@tanstack/react-query";
-import { useForm } from "react-hook-form";
-import { useNavigate } from "react-router-dom";
-import { toast } from "react-toastify";
+} from '@mui/material'
+import { useMutation, useQuery } from '@tanstack/react-query'
+import { useForm } from 'react-hook-form'
+import { useNavigate } from 'react-router-dom'
+import { toast } from 'react-toastify'
 
-import { jobPostApi } from "@/api/job-post/request";
-import { academyApi } from "@/api/academy/request";
-import { CreateJobPostSchema, type CreateJobPostInput } from "@/type/jobpost";
-import NavigationBar from "@/shared/component/NavigationBar";
+import { jobPostApi } from '@/api/job-post/request'
+import { academyApi } from '@/api/academy/request'
+import { CreateJobPostSchema, type CreateJobPostInput } from '@/type/jobpost'
+import NavigationBar from '@/shared/component/NavigationBar'
 
 const defaultValues: CreateJobPostInput = {
-  title: "",
-  jobDescription: "",
-  requiredQualification: "",
-  preferredQualification: "",
-  benefits: "",
+  title: '',
+  jobDescription: '',
+  requiredQualification: '',
+  preferredQualification: '',
+  benefits: '',
   salary: 0,
   salaryNegotiable: false,
-  jobStartDate: "",
-  dueDate: "",
+  jobStartDate: '',
+  dueDate: '',
   forKindergarten: false,
   forElementary: false,
   forMiddleSchool: false,
   forHighSchool: false,
   forAdult: false,
   academyId: 0,
-};
+}
 
 const CreateJobPost = () => {
-  const navigate = useNavigate();
+  const navigate = useNavigate()
 
   const { data: academies, isLoading: isAcademiesLoading } = useQuery({
-    queryKey: ["academies"],
+    queryKey: ['academies'],
     queryFn: () => academyApi.getList(),
-  });
+  })
 
   const {
     register,
     handleSubmit,
     formState: { errors },
+    watch,
+    setValue,
   } = useForm<CreateJobPostInput>({
     resolver: zodResolver(CreateJobPostSchema),
     defaultValues,
-  });
+  })
+
+  const salaryValue = watch('salary')
 
   const createJobPost = useMutation({
     mutationFn: jobPostApi.createJobPost,
     onSuccess: () => {
-      toast.success("공고가 성공적으로 추가되었습니다.");
-      navigate("/job-post");
+      toast.success('공고가 성공적으로 추가되었습니다.')
+      navigate('/job-post')
     },
     onError: () => {
-      alert("채용 공고 생성에 실패했습니다.");
+      alert('채용 공고 생성에 실패했습니다.')
     },
-  });
+  })
 
   const onSubmit = (data: CreateJobPostInput) => {
-    createJobPost.mutate(data);
-  };
+    createJobPost.mutate(data)
+  }
 
   if (isAcademiesLoading) {
     return (
-      <Container maxWidth="md" sx={{ display: "flex", justifyContent: "center", mt: 4 }}>
+      <Container
+        maxWidth="md"
+        sx={{ display: 'flex', justifyContent: 'center', mt: 4 }}
+      >
         <CircularProgress />
       </Container>
-    );
+    )
   }
 
   return (
@@ -93,17 +100,17 @@ const CreateJobPost = () => {
         <Box
           component="form"
           onSubmit={handleSubmit(onSubmit)}
-          sx={{ display: "flex", flexDirection: "column", gap: 2 }}
+          sx={{ display: 'flex', flexDirection: 'column', gap: 2 }}
         >
           <FormControl fullWidth error={!!errors.academyId}>
             <InputLabel id="academyId-label">학원</InputLabel>
             <Select
               labelId="academyId-label"
               label="학원"
-              {...register("academyId", { valueAsNumber: true })}
+              {...register('academyId', { valueAsNumber: true })}
               error={!!errors.academyId}
             >
-              {academies?.map((academies) => (
+              {academies?.map(academies => (
                 <MenuItem key={academies.id} value={academies.id}>
                   {academies.name}
                 </MenuItem>
@@ -119,7 +126,7 @@ const CreateJobPost = () => {
           <TextField
             label="공고 제목"
             fullWidth
-            {...register("title")}
+            {...register('title')}
             error={!!errors.title}
             helperText={errors.title?.message}
           />
@@ -129,7 +136,7 @@ const CreateJobPost = () => {
             multiline
             rows={4}
             fullWidth
-            {...register("jobDescription")}
+            {...register('jobDescription')}
             error={!!errors.jobDescription}
             helperText={errors.jobDescription?.message}
           />
@@ -139,7 +146,7 @@ const CreateJobPost = () => {
             multiline
             rows={4}
             fullWidth
-            {...register("requiredQualification")}
+            {...register('requiredQualification')}
             error={!!errors.requiredQualification}
             helperText={errors.requiredQualification?.message}
           />
@@ -149,7 +156,7 @@ const CreateJobPost = () => {
             multiline
             rows={4}
             fullWidth
-            {...register("preferredQualification")}
+            {...register('preferredQualification')}
             error={!!errors.preferredQualification}
             helperText={errors.preferredQualification?.message}
           />
@@ -159,22 +166,31 @@ const CreateJobPost = () => {
             multiline
             rows={4}
             fullWidth
-            {...register("benefits")}
+            {...register('benefits')}
             error={!!errors.benefits}
             helperText={errors.benefits?.message}
           />
 
           <Box display="flex" gap={2}>
             <TextField
-              label="급여"
-              type="number"
+              label="월급 (만원)"
+              type="text"
               fullWidth
-              {...register("salary", { valueAsNumber: true })}
+              value={salaryValue ? salaryValue.toLocaleString('ko-KR') : ''}
+              onChange={e => {
+                const numericValue = e.target.value.replace(/[^\d]/g, '')
+                if (numericValue) {
+                  const number = parseInt(numericValue)
+                  setValue('salary', number)
+                } else {
+                  setValue('salary', 0)
+                }
+              }}
               error={!!errors.salary}
               helperText={errors.salary?.message}
             />
             <FormControlLabel
-              control={<Checkbox {...register("salaryNegotiable")} />}
+              control={<Checkbox {...register('salaryNegotiable')} />}
               label="급여 협의 가능"
             />
           </Box>
@@ -185,7 +201,7 @@ const CreateJobPost = () => {
               type="date"
               fullWidth
               InputLabelProps={{ shrink: true }}
-              {...register("jobStartDate")}
+              {...register('jobStartDate')}
               error={!!errors.jobStartDate}
               helperText={errors.jobStartDate?.message}
             />
@@ -194,7 +210,7 @@ const CreateJobPost = () => {
               type="date"
               fullWidth
               InputLabelProps={{ shrink: true }}
-              {...register("dueDate")}
+              {...register('dueDate')}
               error={!!errors.dueDate}
               helperText={errors.dueDate?.message}
             />
@@ -206,40 +222,48 @@ const CreateJobPost = () => {
             </Typography>
             <Box display="flex" flexDirection="column" gap={1}>
               <FormControlLabel
-                control={<Checkbox {...register("forKindergarten")} />}
+                control={<Checkbox {...register('forKindergarten')} />}
                 label="유아 대상"
               />
               <FormControlLabel
-                control={<Checkbox {...register("forElementary")} />}
+                control={<Checkbox {...register('forElementary')} />}
                 label="초등학생 대상"
               />
               <FormControlLabel
-                control={<Checkbox {...register("forMiddleSchool")} />}
+                control={<Checkbox {...register('forMiddleSchool')} />}
                 label="중학생 대상"
               />
               <FormControlLabel
-                control={<Checkbox {...register("forHighSchool")} />}
+                control={<Checkbox {...register('forHighSchool')} />}
                 label="고등학생 대상"
               />
               <FormControlLabel
-                control={<Checkbox {...register("forAdult")} />}
+                control={<Checkbox {...register('forAdult')} />}
                 label="성인 대상"
               />
             </Box>
           </FormGroup>
 
           <Box display="flex" gap={2} mt={2}>
-            <Button variant="outlined" onClick={() => navigate("/job-post")}>
+            <Button variant="outlined" onClick={() => navigate('/job-post')}>
               취소
             </Button>
-            <Button type="submit" variant="contained" disabled={createJobPost.isPending}>
-              {createJobPost.isPending ? <CircularProgress size={24} /> : "작성"}
+            <Button
+              type="submit"
+              variant="contained"
+              disabled={createJobPost.isPending}
+            >
+              {createJobPost.isPending ? (
+                <CircularProgress size={24} />
+              ) : (
+                '작성'
+              )}
             </Button>
           </Box>
         </Box>
       </Container>
     </>
-  );
-};
+  )
+}
 
-export default CreateJobPost;
+export default CreateJobPost

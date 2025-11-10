@@ -19,7 +19,6 @@ import { useNavigate } from 'react-router-dom'
 
 import { jobPostQueries } from '@/api/job-post/query'
 import NavigationBar from '@/shared/component/NavigationBar'
-import { formatCurrency } from '@/shared/lib/format'
 
 const JobPostList = () => {
   const navigate = useNavigate()
@@ -117,7 +116,9 @@ const JobPostList = () => {
                   <TableCell>{jobPost.academyName}</TableCell>
                   <TableCell>{jobPost.title}</TableCell>
                   <TableCell>{jobPost.resumeCount}명</TableCell>
-                  <TableCell>{formatCurrency(jobPost.salary)}</TableCell>
+                  <TableCell>
+                    {jobPost.salary.toLocaleString('ko-KR')}만원
+                  </TableCell>
                   <TableCell>
                     {new Date(jobPost.createdAt).toLocaleDateString()}
                   </TableCell>
